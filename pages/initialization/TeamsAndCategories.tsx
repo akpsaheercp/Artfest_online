@@ -39,7 +39,7 @@ const getThemeColor = (str: string) => {
 // --- Components ---
 
 const StatCard = ({ label, value, icon: Icon, color }: { label: string, value: number, icon: any, color: string }) => (
-    <div className="relative overflow-hidden bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-zinc-100 dark:border-zinc-800 shadow-sm group hover:shadow-md transition-all">
+    <div className="relative overflow-hidden bg-white dark:bg-zinc-900/50 rounded-3xl p-6 shadow-sm group hover:shadow-md transition-all">
         <div className={`absolute -right-4 -top-4 w-24 h-24 rounded-full opacity-10 group-hover:scale-110 transition-transform ${color}`}></div>
         <div className="relative z-10 flex items-center justify-between">
             <div>
@@ -91,7 +91,7 @@ const EntityManager = <T extends { id: string; name: string }>({
         if (val === undefined) return null;
         const isCapped = globalVal !== undefined && globalVal !== null && val > globalVal;
         return (
-            <div className={`flex flex-col items-center px-3 py-1.5 rounded-xl border text-[10px] font-mono leading-none ${isCapped ? 'bg-rose-50 border-rose-200 text-rose-600' : 'bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400'}`}>
+            <div className={`flex flex-col items-center px-3 py-1.5 rounded-xl text-[10px] font-mono leading-none ${isCapped ? 'bg-rose-50 text-rose-600 shadow-sm' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 shadow-sm'}`}>
                 <span className="font-bold text-xs">{val}</span>
                 <span className="text-[8px] uppercase opacity-60 mt-0.5 font-sans">{label}</span>
             </div>
@@ -108,7 +108,7 @@ const EntityManager = <T extends { id: string; name: string }>({
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder={`Search ${type.toLowerCase()}s...`} 
-                        className="w-full pl-11 pr-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm font-medium focus:ring-2 focus:ring-amazio-primary/20 outline-none transition-all shadow-sm"
+                        className="w-full pl-11 pr-4 py-3 rounded-2xl bg-zinc-100 dark:bg-zinc-800/80 text-sm font-medium focus:ring-2 focus:ring-amazio-primary/20 outline-none transition-all shadow-inner border-none"
                     />
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
@@ -146,17 +146,17 @@ const EntityManager = <T extends { id: string; name: string }>({
                         <div 
                             key={item.id}
                             onClick={() => toggleSelect(item.id)}
-                            className={`group relative bg-white dark:bg-zinc-900 border-2 transition-all duration-300 rounded-[2.5rem] p-6 flex flex-col justify-between h-full cursor-pointer ${isSelected ? `border-amazio-secondary bg-amazio-secondary/5 ring-4 ring-amazio-secondary/5 scale-[1.02] shadow-xl` : 'border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-sm'}`}
+                            className={`group relative bg-white dark:bg-zinc-900/40 transition-all duration-300 rounded-[2.5rem] p-6 flex flex-col justify-between h-full cursor-pointer border-none ${isSelected ? `bg-amazio-secondary/10 ring-4 ring-amazio-secondary/5 scale-[1.02] shadow-xl` : 'hover:bg-zinc-50 dark:hover:bg-zinc-800/60 shadow-sm'}`}
                         >
                             <div className="space-y-4">
                                 <div className="flex justify-between items-start">
-                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${isSelected ? theme.bg + ' text-white shadow-lg' : theme.light + ' ' + theme.text + ' ' + theme.border + ' border'}`}>
+                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${isSelected ? theme.bg + ' text-white shadow-lg' : theme.light + ' ' + theme.text + ' shadow-sm'}`}>
                                         {type === 'TEAM' ? <Users size={24} /> : <Layers size={24} />}
                                     </div>
                                     <div className="flex gap-2">
                                         <button 
                                             onClick={(e) => { e.stopPropagation(); onUpdate(item); }}
-                                            className={`p-2 rounded-xl transition-all opacity-0 group-hover:opacity-100 focus-within:opacity-100 ${isSelected ? 'text-amazio-secondary hover:bg-amazio-secondary/10' : 'text-zinc-300 hover:text-amazio-primary hover:bg-zinc-50 dark:hover:bg-white/5'}`}
+                                            className={`p-2 rounded-xl transition-all opacity-0 group-hover:opacity-100 focus-within:opacity-100 ${isSelected ? 'text-amazio-secondary hover:bg-amazio-secondary/10' : 'text-zinc-300 hover:text-amazio-primary hover:bg-zinc-100 dark:hover:bg-white/5'}`}
                                         >
                                             <Edit3 size={18} />
                                         </button>
@@ -171,7 +171,7 @@ const EntityManager = <T extends { id: string; name: string }>({
                                     
                                     {type === 'CATEGORY' && category && (
                                         <div className="flex items-center gap-2 mt-3">
-                                            <span className={`px-2.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-widest border ${category.isGeneralCategory ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800' : 'bg-zinc-50 text-zinc-500 border-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700'}`}>
+                                            <span className={`px-2.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-widest ${category.isGeneralCategory ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' : 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400'}`}>
                                                 {category.isGeneralCategory ? 'General Scope' : 'Standard Level'}
                                             </span>
                                         </div>
@@ -196,25 +196,28 @@ const EntityManager = <T extends { id: string; name: string }>({
                                 </div>
                             </div>
 
-                            <div className={`mt-6 pt-5 border-t ${isSelected ? 'border-amazio-secondary/10' : 'border-zinc-50 dark:border-zinc-800'} flex items-center justify-between`}>
-                                {type === 'CATEGORY' && category ? (
-                                    <div className="flex gap-2">
-                                        <LimitBadge label="On" val={category.maxOnStage} globalVal={globalSettings?.maxItemsPerParticipant?.onStage} />
-                                        <LimitBadge label="Off" val={category.maxOffStage} globalVal={globalSettings?.maxItemsPerParticipant?.offStage} />
-                                        <LimitBadge label="Tot" val={category.maxCombined} globalVal={globalSettings?.maxTotalItemsPerParticipant} />
-                                    </div>
-                                ) : (
-                                    <div className="flex items-center gap-2">
-                                        <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} shadow-glow`}></div>
-                                        <span className={`text-[10px] font-black uppercase tracking-widest ${isSelected ? 'text-amazio-primary/60' : 'text-zinc-400'}`}>{teamParticipants.length} Participants</span>
-                                    </div>
-                                )}
+                            <div className={`mt-6 pt-5 flex flex-col gap-4`}>
+                                <div className={`h-px w-full ${isSelected ? 'bg-amazio-secondary/10' : 'bg-zinc-100 dark:bg-zinc-800/50'}`}></div>
+                                <div className="flex items-center justify-between">
+                                    {type === 'CATEGORY' && category ? (
+                                        <div className="flex gap-2">
+                                            <LimitBadge label="On" val={category.maxOnStage} globalVal={globalSettings?.maxItemsPerParticipant?.onStage} />
+                                            <LimitBadge label="Off" val={category.maxOffStage} globalVal={globalSettings?.maxItemsPerParticipant?.offStage} />
+                                            <LimitBadge label="Tot" val={category.maxCombined} globalVal={globalSettings?.maxTotalItemsPerParticipant} />
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center gap-2">
+                                            <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} shadow-glow`}></div>
+                                            <span className={`text-[10px] font-black uppercase tracking-widest ${isSelected ? 'text-amazio-primary/60' : 'text-zinc-400'}`}>{teamParticipants.length} Participants</span>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     );
                 })}
                 {filteredItems.length === 0 && (
-                    <div className="col-span-full py-24 flex flex-col items-center justify-center text-zinc-300 dark:text-zinc-600 border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-[3rem]">
+                    <div className="col-span-full py-24 flex flex-col items-center justify-center text-zinc-300 dark:text-zinc-600 bg-zinc-50 dark:bg-zinc-900/30 rounded-[3rem]">
                         <MoreHorizontal size={48} className="mb-2 opacity-30" />
                         <p className="text-xs font-black uppercase tracking-[0.3em]">Awaiting records</p>
                     </div>
@@ -279,52 +282,52 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({ isOpen, onClose, onSave, 
 
     return ReactDOM.createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200" onClick={onClose}>
-            <div className="bg-white dark:bg-zinc-900 w-full max-w-lg rounded-[2.5rem] shadow-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
-                <div className="p-7 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-white/[0.02] flex justify-between items-center">
+            <div className="bg-white dark:bg-zinc-900 w-full max-w-lg rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden border-none" onClick={e => e.stopPropagation()}>
+                <div className="p-7 bg-zinc-50/50 dark:bg-white/[0.02] flex justify-between items-center">
                     <h3 className="text-xl font-black font-serif text-amazio-primary dark:text-white uppercase tracking-tighter">{editingTeam ? 'Edit Team' : 'Create Team'}</h3>
                     <button onClick={onClose} className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"><X size={20} className="text-zinc-500" /></button>
                 </div>
                 <div className="p-8 space-y-8">
                     <div>
                         <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Identity Title</label>
-                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Sapphire House" className="w-full p-4 bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-700 rounded-2xl text-lg font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all" autoFocus />
+                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Sapphire House" className="w-full p-4 bg-zinc-100 dark:bg-black/20 rounded-2xl text-lg font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all border-none shadow-inner" autoFocus />
                     </div>
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
                             <label className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-500 flex items-center gap-2"><Shield size={12} /> Registry Leadership</label>
-                            <div className="flex bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg">
+                            <div className="flex bg-zinc-200 dark:bg-zinc-800 p-1 rounded-lg shadow-inner">
                                 <button onClick={() => setLeaderMode('NEW')} className={`px-4 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-md transition-all ${leaderMode === 'NEW' ? 'bg-white dark:bg-zinc-700 shadow-sm text-zinc-900 dark:text-white' : 'text-zinc-400'}`}>New</button>
                                 <button onClick={() => setLeaderMode('EXISTING')} className={`px-4 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-md transition-all ${leaderMode === 'EXISTING' ? 'bg-white dark:bg-zinc-700 shadow-sm text-zinc-900 dark:text-white' : 'text-zinc-400'}`}>Link</button>
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 gap-4 p-6 rounded-[2rem] bg-zinc-50/50 dark:bg-white/[0.02] border border-zinc-100 dark:border-zinc-800">
+                        <div className="grid grid-cols-1 gap-4 p-6 rounded-[2rem] bg-zinc-50/50 dark:bg-white/[0.02]">
                             {leaderMode === 'NEW' ? (
                                 <>
                                     <div>
                                         <label className="block text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1.5">Official Team Leader</label>
-                                        <input type="text" value={newLeaderName} onChange={(e) => setNewLeaderName(e.target.value)} placeholder="Full Name..." className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm font-bold outline-none focus:border-emerald-500 transition-colors" />
+                                        <input type="text" value={newLeaderName} onChange={(e) => setNewLeaderName(e.target.value)} placeholder="Full Name..." className="w-full px-4 py-3 bg-white dark:bg-zinc-900 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 transition-colors shadow-sm border-none" />
                                     </div>
                                     <div>
                                         <label className="block text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1.5">Assistant Coordinator</label>
-                                        <input type="text" value={newAssistantName} onChange={(e) => setNewAssistantName(e.target.value)} placeholder="Full Name..." className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm font-bold outline-none focus:border-emerald-500 transition-colors" />
+                                        <input type="text" value={newAssistantName} onChange={(e) => setNewAssistantName(e.target.value)} placeholder="Full Name..." className="w-full px-4 py-3 bg-white dark:bg-zinc-900 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 transition-colors shadow-sm border-none" />
                                     </div>
                                 </>
                             ) : (
                                 <>
                                     <div>
                                         <label className="block text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1.5">Assign Leader</label>
-                                        <select value={selectedLeaderId} onChange={(e) => setSelectedLeaderId(e.target.value)} className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm font-bold outline-none appearance-none cursor-pointer"><option value="">-- No Selection --</option>{existingParticipants.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select>
+                                        <select value={selectedLeaderId} onChange={(e) => setSelectedLeaderId(e.target.value)} className="w-full px-4 py-3 bg-white dark:bg-zinc-900 rounded-xl text-sm font-bold outline-none appearance-none cursor-pointer border-none shadow-sm"><option value="">-- No Selection --</option>{existingParticipants.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select>
                                     </div>
                                     <div>
                                         <label className="block text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1.5">Assign Assistant</label>
-                                        <select value={selectedAssistantId} onChange={(e) => setSelectedAssistantId(e.target.value)} className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm font-bold outline-none appearance-none cursor-pointer"><option value="">-- No Selection --</option>{existingParticipants.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select>
+                                        <select value={selectedAssistantId} onChange={(e) => setSelectedAssistantId(e.target.value)} className="w-full px-4 py-3 bg-white dark:bg-zinc-900 rounded-xl text-sm font-bold outline-none appearance-none cursor-pointer border-none shadow-sm"><option value="">-- No Selection --</option>{existingParticipants.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select>
                                     </div>
                                 </>
                             )}
                         </div>
                     </div>
                 </div>
-                <div className="p-7 bg-zinc-50 dark:bg-zinc-900/50 border-t border-zinc-100 dark:border-border flex justify-end gap-4">
+                <div className="p-7 bg-zinc-50 dark:bg-zinc-900/50 flex justify-end gap-4">
                     <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-amazio-primary transition-colors">Discard</button>
                     <button onClick={handleSave} className="px-10 py-4 bg-emerald-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-emerald-500/20 transition-all active:scale-95">Save Team</button>
                 </div>
@@ -380,30 +383,30 @@ const CategoryFormModal: React.FC<CategoryFormModalProps> = ({ isOpen, onClose, 
 
     return ReactDOM.createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200" onClick={onClose}>
-            <div className="bg-white dark:bg-zinc-900 w-full max-w-lg rounded-[2.5rem] shadow-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
-                <div className="p-7 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-white/[0.02] flex justify-between items-center">
+            <div className="bg-white dark:bg-zinc-900 w-full max-w-lg rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden border-none" onClick={e => e.stopPropagation()}>
+                <div className="p-7 bg-zinc-50/50 dark:bg-white/[0.02] flex justify-between items-center">
                     <h3 className="text-xl font-black font-serif text-amazio-primary dark:text-white uppercase tracking-tighter">{editingCategory ? 'Edit Scope' : 'Add Scope'}</h3>
                     <button onClick={onClose} className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"><X size={20} className="text-zinc-500" /></button>
                 </div>
                 <div className="p-8 space-y-8">
                     <div>
                         <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Scope Title</label>
-                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Intermediates" className="w-full p-4 bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-700 rounded-2xl text-lg font-bold outline-none focus:ring-2 focus:ring-amber-500/20 transition-all" autoFocus />
+                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Intermediates" className="w-full p-4 bg-zinc-100 dark:bg-black/20 rounded-2xl text-lg font-bold outline-none focus:ring-2 focus:ring-amber-500/20 transition-all border-none shadow-inner" autoFocus />
                     </div>
                     <div className="space-y-4">
                         <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Threshold Constraints</label>
                         <div className="grid grid-cols-3 gap-4">
-                            <div><label className="block text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1.5 text-center">On Stage</label><input type="number" value={maxOnStage} onChange={(e) => setMaxOnStage(e.target.value)} placeholder="∞" className="w-full p-3 text-center bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm font-bold outline-none focus:border-amber-500 transition-colors" /></div>
-                            <div><label className="block text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1.5 text-center">Off Stage</label><input type="number" value={maxOffStage} onChange={(e) => setMaxOffStage(e.target.value)} placeholder="∞" className="w-full p-3 text-center bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm font-bold outline-none focus:border-amber-500 transition-colors" /></div>
-                            <div><label className="block text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1.5 text-center">Combined</label><input type="number" value={maxCombined} onChange={(e) => setMaxCombined(e.target.value)} placeholder="∞" className="w-full p-3 text-center bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm font-bold outline-none focus:border-amber-500 transition-colors" /></div>
+                            <div><label className="block text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1.5 text-center">On Stage</label><input type="number" value={maxOnStage} onChange={(e) => setMaxOnStage(e.target.value)} placeholder="∞" className="w-full p-3 text-center bg-zinc-100 dark:bg-black/20 rounded-xl text-sm font-bold outline-none border-none shadow-sm focus:ring-2 focus:ring-amber-500/20 transition-all" /></div>
+                            <div><label className="block text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1.5 text-center">Off Stage</label><input type="number" value={maxOffStage} onChange={(e) => setMaxOffStage(e.target.value)} placeholder="∞" className="w-full p-3 text-center bg-zinc-100 dark:bg-black/20 rounded-xl text-sm font-bold outline-none border-none shadow-sm focus:ring-2 focus:ring-amber-500/20 transition-all" /></div>
+                            <div><label className="block text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1.5 text-center">Combined</label><input type="number" value={maxCombined} onChange={(e) => setMaxCombined(e.target.value)} placeholder="∞" className="w-full p-3 text-center bg-zinc-100 dark:bg-black/20 rounded-xl text-sm font-bold outline-none border-none shadow-sm focus:ring-2 focus:ring-amber-500/20 transition-all" /></div>
                         </div>
                     </div>
-                    <div className="flex items-center gap-4 p-5 rounded-[2rem] bg-zinc-50/50 dark:bg-white/[0.02] border border-zinc-100 dark:border-zinc-800 cursor-pointer" onClick={() => setIsGeneralCategory(!isGeneralCategory)}>
-                        <div className={`w-7 h-7 rounded-xl border-2 flex items-center justify-center transition-colors ${isGeneralCategory ? 'bg-amber-500 border-amber-500 shadow-lg' : 'border-zinc-300 dark:border-zinc-600'}`}>{isGeneralCategory && <Check size={16} className="text-white" strokeWidth={4} />}</div>
+                    <div className="flex items-center gap-4 p-5 rounded-[2rem] bg-zinc-100 dark:bg-white/[0.02] cursor-pointer shadow-sm" onClick={() => setIsGeneralCategory(!isGeneralCategory)}>
+                        <div className={`w-7 h-7 rounded-xl flex items-center justify-center transition-colors ${isGeneralCategory ? 'bg-amber-500 shadow-lg' : 'bg-zinc-200 dark:bg-zinc-700'}`}>{isGeneralCategory && <Check size={16} className="text-white" strokeWidth={4} />}</div>
                         <div><span className="text-sm font-black uppercase tracking-tight text-zinc-800 dark:text-zinc-200 block leading-none mb-1">General Category</span><span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Global scope open to all participants</span></div>
                     </div>
                 </div>
-                <div className="p-7 bg-zinc-50 dark:bg-zinc-900/50 border-t border-zinc-100 dark:border-border flex justify-end gap-4">
+                <div className="p-7 bg-zinc-50 dark:bg-zinc-900/50 flex justify-end gap-4">
                     <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-amazio-primary transition-colors">Discard</button>
                     <button onClick={handleSave} className="px-10 py-4 bg-amber-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-amber-500/20 transition-all active:scale-95">Save Scope</button>
                 </div>
