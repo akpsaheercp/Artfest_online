@@ -44,7 +44,7 @@ const SectionTitle = ({ title, icon: Icon, color = 'indigo' }: { title: string, 
     return (
         <div className="flex items-center gap-3 mb-4 md:mb-6">
             <div className={`h-5 w-1.5 rounded-full ${colors[color] || colors.indigo}`}></div>
-            <h3 className="text-lg md:text-xl font-black font-serif text-amazio-primary dark:text-white uppercase tracking-tighter">
+            <h3 className="text-lg md:text-xl font-black font-serif text-brand-primary dark:text-white uppercase tracking-tighter">
                 {title}
             </h3>
             {Icon && <Icon className="text-zinc-400 ml-1" size={18} />}
@@ -118,7 +118,7 @@ const ItemPointOverrideModal: React.FC<{
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-amber-500 rounded-xl text-white"><SlidersHorizontal size={18}/></div>
                         <div>
-                            <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-amazio-primary dark:text-white">{item.name}</h3>
+                            <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-brand-primary dark:text-white">{item.name}</h3>
                             <p className="text-[10px] font-black uppercase text-zinc-400 mt-1 tracking-widest">Specific Point Overrides</p>
                         </div>
                     </div>
@@ -176,7 +176,7 @@ const ItemPointOverrideModal: React.FC<{
 
                 <div className="p-7 border-t border-white/5 bg-zinc-50 dark:bg-white/[0.02] flex justify-end gap-4">
                     <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500">Cancel</button>
-                    <button onClick={handleSave} disabled={isSaving} className="px-10 py-4 bg-amazio-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-amazio-primary/20 active:scale-95 transition-all">
+                    <button onClick={handleSave} disabled={isSaving} className="px-10 py-4 bg-brand-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-brand-primary/20 active:scale-95 transition-all">
                         {isSaving ? 'Saving...' : 'Apply Overrides'}
                     </button>
                 </div>
@@ -359,7 +359,7 @@ const LotMachine: React.FC = () => {
     };
 
     return (
-        <div className="bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl rounded-3xl md:rounded-[3rem] border border-amazio-primary/5 dark:border-white/5 p-5 md:p-10 shadow-glass-light dark:shadow-2xl relative overflow-hidden min-h-[500px]">
+        <div className="bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl rounded-3xl md:rounded-[3rem] border border-brand-primary/5 dark:border-white/5 p-5 md:p-10 shadow-glass-light dark:shadow-2xl relative overflow-hidden min-h-[500px]">
             {/* SUCCESS OVERLAY */}
             {assignmentStatus === 'success' && (
                 <div className="absolute inset-0 z-[100] bg-emerald-600/95 backdrop-blur-2xl flex flex-col items-center justify-center text-white animate-in fade-in duration-500">
@@ -553,7 +553,7 @@ const BulkCodeAssigner: React.FC = () => {
     };
 
     return (
-        <div className="bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl rounded-[3rem] border border-amazio-primary/5 dark:border-white/5 p-8 shadow-glass-light dark:shadow-2xl relative flex flex-col h-full overflow-hidden">
+        <div className="bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl rounded-[3rem] border border-brand-primary/5 dark:border-white/5 p-8 shadow-glass-light dark:shadow-2xl relative flex flex-col h-full overflow-hidden">
             <div className="flex justify-between items-start mb-6">
                 <SectionTitle title="Direct Mapping" icon={LayoutList} color="indigo" />
                 {hasAnyConflicts && (
@@ -610,7 +610,7 @@ const BulkCodeAssigner: React.FC = () => {
                                         >
                                             <div className="min-w-0 pr-4 flex-grow flex items-center gap-3">
                                                 <div className="truncate">
-                                                    <div className={`font-black text-xs uppercase ${isSelected ? 'text-indigo-600 dark:text-indigo-400' : isAssigned ? 'text-emerald-800 dark:text-emerald-400' : 'text-amazio-primary dark:text-zinc-200'}`}>
+                                                    <div className={`font-black text-xs uppercase ${isSelected ? 'text-indigo-600 dark:text-indigo-400' : isAssigned ? 'text-emerald-800 dark:text-emerald-400' : 'text-brand-primary dark:text-zinc-200'}`}>
                                                         {item.name}
                                                     </div>
                                                     <div className="flex items-center gap-2 mt-1">
@@ -722,7 +722,7 @@ const ManualCodeEditorModal: React.FC<{ itemId: string; onClose: () => void }> =
                 <div className="p-7 border-b border-white/5 flex justify-between items-center bg-zinc-50 dark:bg-white/[0.02]">
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-indigo-50 rounded-xl text-white"><Edit2 size={18}/></div>
-                        <div><h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-amazio-primary dark:text-white">{item.name}</h3><p className="text-[10px] font-black uppercase text-zinc-400 mt-1 tracking-widest">Manual Code Assignment</p></div>
+                        <div><h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-brand-primary dark:text-white">{item.name}</h3><p className="text-[10px] font-black uppercase text-zinc-400 mt-1 tracking-widest">Manual Code Assignment</p></div>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-xl"><X size={20} className="text-zinc-500"/></button>
                 </div>
@@ -740,7 +740,7 @@ const ManualCodeEditorModal: React.FC<{ itemId: string; onClose: () => void }> =
                         return (
                             <div key={e.id} className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${isDuplicate ? 'bg-rose-50/30 dark:bg-rose-900/10 border-rose-500/40' : 'bg-zinc-50 dark:bg-black/20 border-zinc-100 dark:border-white/5'}`}>
                                 <div className="min-w-0 pr-4">
-                                    <div className={`font-black text-sm uppercase tracking-tight truncate ${isDuplicate ? 'text-rose-600 dark:text-rose-400' : 'text-amazio-primary dark:text-zinc-100'}`}>
+                                    <div className={`font-black text-sm uppercase tracking-tight truncate ${isDuplicate ? 'text-rose-600 dark:text-rose-400' : 'text-brand-primary dark:text-zinc-100'}`}>
                                         {e.name}
                                     </div>
                                     <div className="text-[10px] font-mono font-black text-zinc-400 mt-0.5">#{e.chestNumber}</div>
@@ -760,7 +760,7 @@ const ManualCodeEditorModal: React.FC<{ itemId: string; onClose: () => void }> =
                 </div>
                 <div className="p-7 border-t border-white/5 bg-zinc-50 dark:bg-white/[0.02] flex justify-end gap-4">
                     <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500">Discard</button>
-                    <button onClick={handleSave} className="px-10 py-4 bg-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-amazio-primary/20 active:scale-95 transition-all">Save Changes</button>
+                    <button onClick={handleSave} className="px-10 py-4 bg-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-brand-primary/20 active:scale-95 transition-all">Save Changes</button>
                 </div>
             </div>
         </div>, document.body
@@ -794,7 +794,7 @@ const CodeRegistry: React.FC = () => {
     };
 
     return (
-        <div className="bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] border border-amazio-primary/5 dark:border-white/5 p-8 shadow-glass-light dark:shadow-2xl h-full flex flex-col overflow-hidden">
+        <div className="bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] border border-brand-primary/5 dark:border-white/5 p-8 shadow-glass-light dark:shadow-2xl h-full flex flex-col overflow-hidden">
             <div className="flex justify-between items-start mb-6">
                 <SectionTitle title="Identity Registry" icon={Hash} color="rose" />
                 <div className="flex gap-2">
@@ -886,9 +886,9 @@ const GradeRuleEditor: React.FC<{ itemType: 'single' | 'group' }> = ({ itemType 
     };
 
     return (
-        <div className="bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] border border-amazio-primary/5 dark:border-white/5 p-8 shadow-glass-light dark:shadow-2xl">
+        <div className="bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] border border-brand-primary/5 dark:border-white/5 p-8 shadow-glass-light dark:shadow-2xl">
             <div className="flex justify-between items-center mb-6">
-                <h3 className="font-serif font-black text-lg text-amazio-primary dark:text-white uppercase tracking-tighter capitalize">Global {itemType} Grade Tiers</h3>
+                <h3 className="font-serif font-black text-lg text-brand-primary dark:text-white uppercase tracking-tighter capitalize">Global {itemType} Grade Tiers</h3>
                 <span className="px-4 py-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500 text-[10px] font-black uppercase tracking-widest border">
                     {grades.length} Active
                 </span>
@@ -903,7 +903,7 @@ const GradeRuleEditor: React.FC<{ itemType: 'single' | 'group' }> = ({ itemType 
                                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-white text-xl shadow-lg ${colors.bg}`}>{grade.name.charAt(0)}</div>
                                 <div>
                                     <div className="text-[9px] text-zinc-400 font-black uppercase tracking-widest opacity-60">Range</div>
-                                    <div className="font-mono font-black text-amazio-primary dark:text-zinc-200 text-lg">{grade.lowerLimit}% - {grade.upperLimit}%</div>
+                                    <div className="font-mono font-black text-brand-primary dark:text-zinc-200 text-lg">{grade.lowerLimit}% - {grade.upperLimit}%</div>
                                 </div>
                                 <div className="text-right ml-4">
                                     <div className="text-[9px] text-zinc-400 font-black uppercase tracking-widest opacity-60">Pts</div>
@@ -925,7 +925,7 @@ const GradeRuleEditor: React.FC<{ itemType: 'single' | 'group' }> = ({ itemType 
                     <input type="number" placeholder="Max %" value={formData.upperLimit} onChange={e => setFormData({...formData, upperLimit: +e.target.value})} className="w-full rounded-xl p-3 text-sm font-bold border border-zinc-200 dark:border-zinc-700 outline-none bg-white dark:bg-zinc-800 focus:ring-2 focus:ring-indigo-500/20"/>
                     <input type="number" placeholder="Pts" value={formData.points} onChange={e => setFormData({...formData, points: +e.target.value})} className="w-full rounded-xl p-3 text-sm font-bold border border-zinc-200 dark:border-zinc-700 outline-none bg-white dark:bg-zinc-800 focus:ring-2 focus:ring-indigo-500/20"/>
                 </div>
-                <button type="submit" className="w-full py-4 bg-amazio-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all">
+                <button type="submit" className="w-full py-4 bg-brand-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all">
                     {editingId ? 'Update Range' : 'Add Rule'}
                 </button>
             </form>
@@ -951,7 +951,7 @@ const ItemOverrideSection: React.FC = () => {
     const selectedItem = state.items.find(i => i.id === selectedItemId);
 
     return (
-        <Card title="Item Point Overrides" action={<span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{filteredItems.length} Scopes</span>}>
+        <Card title="Item Point Overrides" action={<span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{filteredItems.length} Categories</span>}>
             <div className="space-y-6">
                 <div className="p-4 rounded-2xl bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-900/30 flex items-start gap-4">
                     <Info size={18} className="text-indigo-500 shrink-0 mt-0.5" />
@@ -978,7 +978,7 @@ const ItemOverrideSection: React.FC = () => {
                                         </div>
                                         {(hasOverrides || isCustomPrizes) && <Star size={12} className={selectedItemId === item.id ? 'text-white' : 'text-amber-500'} fill="currentColor"/>}
                                     </div>
-                                    <h4 className={`text-sm font-black uppercase tracking-tight truncate ${selectedItemId === item.id ? 'text-white' : 'text-amazio-primary dark:text-zinc-100'}`}>
+                                    <h4 className={`text-sm font-black uppercase tracking-tight truncate ${selectedItemId === item.id ? 'text-white' : 'text-brand-primary dark:text-zinc-100'}`}>
                                         {item.name}
                                     </h4>
                                 </div>
@@ -1014,7 +1014,7 @@ const GradePoints: React.FC = () => {
         <div className="space-y-10 pb-24 animate-in fade-in duration-700 relative">
             <div className="hidden md:flex flex-col sm:flex-row sm:items-end justify-between gap-6">
                 <div>
-                    <h2 className="text-5xl font-black font-serif text-amazio-primary dark:text-white tracking-tighter uppercase leading-none">Points Rules</h2>
+                    <h2 className="text-5xl font-black font-serif text-brand-primary dark:text-white tracking-tighter uppercase leading-none">Points Rules</h2>
                     <p className="text-zinc-500 dark:text-zinc-400 mt-3 font-medium text-lg italic">Configure scoring heuristics and identity registries.</p>
                 </div>
             </div>

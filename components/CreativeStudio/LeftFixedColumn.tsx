@@ -547,7 +547,7 @@ const LeftFixedColumn: React.FC<LeftFixedColumnProps> = ({
                         onClick={handleSaveTemplateAndClose} 
                         disabled={isSavingTemplate} 
                         title="Save Current Canvas as New Custom Template" 
-                        className="relative w-9 h-9 flex items-center justify-center rounded-lg transition-colors text-white bg-amazio-secondary hover:bg-amazio-secondary/90 shadow-md"
+                        className="relative w-9 h-9 flex items-center justify-center rounded-lg transition-colors text-white bg-brand-secondary hover:bg-brand-secondary/90 shadow-md"
                     >
                         <Save size={18} />
                     </button>

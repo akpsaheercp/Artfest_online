@@ -90,7 +90,7 @@ const JudgeFormModal: React.FC<JudgeFormModalProps> = ({ isOpen, onClose, initia
             <div className="bg-white dark:bg-[#121412] w-full max-w-lg rounded-[2.5rem] shadow-2xl border border-zinc-200 dark:border-white/10 flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
                 <div className="p-7 border-b border-zinc-100 dark:border-white/5 flex justify-between items-center bg-zinc-50/50 dark:bg-white/[0.01]">
                     <div>
-                        <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-amazio-primary dark:text-white">{initialData ? 'Edit Official' : 'Add Official'}</h3>
+                        <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-brand-primary dark:text-white">{initialData ? 'Edit Official' : 'Add Official'}</h3>
                         <p className="text-[10px] font-black uppercase text-zinc-400 mt-1.5 tracking-widest">Judicial Registry</p>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-xl transition-colors text-zinc-400"><X size={24}/></button>
@@ -103,7 +103,7 @@ const JudgeFormModal: React.FC<JudgeFormModalProps> = ({ isOpen, onClose, initia
                             value={name} 
                             onChange={e => setName(e.target.value)} 
                             placeholder="Full Name" 
-                            className="w-full p-4 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-700 text-sm font-bold outline-none focus:ring-2 focus:ring-amazio-primary/20 transition-all"
+                            className="w-full p-4 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-700 text-sm font-bold outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all"
                             autoFocus
                         />
                     </div>
@@ -115,7 +115,7 @@ const JudgeFormModal: React.FC<JudgeFormModalProps> = ({ isOpen, onClose, initia
                                 value={place} 
                                 onChange={e => setPlace(e.target.value)} 
                                 placeholder="Home Town / City" 
-                                className="w-full p-4 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-700 text-sm font-bold outline-none focus:ring-2 focus:ring-amazio-primary/20 transition-all"
+                                className="w-full p-4 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-700 text-sm font-bold outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all"
                             />
                         </div>
                         <div>
@@ -125,13 +125,13 @@ const JudgeFormModal: React.FC<JudgeFormModalProps> = ({ isOpen, onClose, initia
                                 value={profession} 
                                 onChange={e => setProfession(e.target.value)} 
                                 placeholder="Designation" 
-                                className="w-full p-4 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-700 text-sm font-bold outline-none focus:ring-2 focus:ring-amazio-primary/20 transition-all"
+                                className="w-full p-4 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-700 text-sm font-bold outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all"
                             />
                         </div>
                     </div>
                 </div>
                 <div className="p-7 border-t border-zinc-100 dark:border-white/5 bg-zinc-50/50 dark:bg-white/[0.01] flex justify-end gap-4">
-                    <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-amazio-primary transition-colors">Discard</button>
+                    <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-brand-primary transition-colors">Discard</button>
                     <button 
                         onClick={handleSubmit} 
                         disabled={!name.trim() || isSaving}
@@ -195,7 +195,7 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
                             {mode === 'BY_ITEM' ? <Layers size={24} /> : <User size={24} />}
                         </div>
                         <div>
-                            <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-amazio-primary dark:text-white">{title}</h3>
+                            <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-brand-primary dark:text-white">{title}</h3>
                             {subtitle && <p className="text-[10px] font-black uppercase text-zinc-400 mt-1.5 tracking-widest">{subtitle}</p>}
                         </div>
                     </div>
@@ -233,7 +233,7 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
                                             {mode === 'BY_ITEM' ? <User size={18}/> : <FileText size={18}/>}
                                         </div>
                                         <div className="min-w-0">
-                                            <div className={`text-sm font-black uppercase tracking-tight truncate ${isSelected ? 'text-amazio-primary dark:text-white' : 'text-zinc-600 dark:text-zinc-400'}`}>{entity.name}</div>
+                                            <div className={`text-sm font-black uppercase tracking-tight truncate ${isSelected ? 'text-brand-primary dark:text-white' : 'text-zinc-600 dark:text-zinc-400'}`}>{entity.name}</div>
                                             {isJudgeEntity && entity.place && (
                                                 <div className="flex items-center gap-1 mt-0.5">
                                                     <MapPin size={9} className="text-zinc-400" />
@@ -262,7 +262,7 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
                 </div>
 
                 <div className="p-7 border-t border-zinc-100 dark:border-white/5 bg-zinc-50/50 dark:bg-white/[0.01] flex justify-end gap-4">
-                    <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-amazio-primary transition-colors">Discard</button>
+                    <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-brand-primary transition-colors">Discard</button>
                     <button 
                         onClick={onSave} 
                         disabled={!isDirty || isSaving}
@@ -316,7 +316,7 @@ const SelectableCard: React.FC<{
                 </div>
                 
                 <div>
-                    <h3 className={`text-xl font-black uppercase tracking-tight leading-tight transition-colors ${isActive ? 'text-white' : 'text-amazio-primary dark:text-zinc-100'}`}>
+                    <h3 className={`text-xl font-black uppercase tracking-tight leading-tight transition-colors ${isActive ? 'text-white' : 'text-brand-primary dark:text-zinc-100'}`}>
                         {title}
                     </h3>
                     {(subtitle || location) && (
@@ -485,24 +485,24 @@ const JudgesManagement: React.FC = () => {
         <div className="space-y-6 md:space-y-10 animate-in fade-in duration-500 pb-24 relative">
             <div className="hidden md:flex flex-col sm:flex-row sm:items-end justify-between gap-6">
                 <div>
-                    <h2 className="text-5xl font-black font-serif text-amazio-primary dark:text-white tracking-tighter uppercase leading-none">Judges & Assignments</h2>
+                    <h2 className="text-5xl font-black font-serif text-brand-primary dark:text-white tracking-tighter uppercase leading-none">Judges & Assignments</h2>
                     <p className="text-zinc-500 dark:text-zinc-400 mt-3 font-medium text-lg italic">Adjudicator orchestration terminal.</p>
                 </div>
             </div>
 
             {view === 'ASSIGNMENTS' && (
                 <div className="animate-in slide-in-from-right duration-500 space-y-8">
-                    <div className="flex justify-between items-center bg-white/60 dark:bg-zinc-900/40 backdrop-blur-xl border border-amazio-primary/5 dark:border-white/5 p-6 rounded-[2.5rem] shadow-glass-light dark:shadow-2xl">
+                    <div className="flex justify-between items-center bg-white/60 dark:bg-zinc-900/40 backdrop-blur-xl border border-brand-primary/5 dark:border-white/5 p-6 rounded-[2.5rem] shadow-glass-light dark:shadow-2xl">
                          <div className="flex items-center gap-4">
                             <div className="p-3 bg-indigo-600 text-white rounded-2xl shadow-lg">
                                 <ShieldCheck size={24} />
                             </div>
                             <div>
-                                <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-amazio-primary dark:text-white">Coverage Hub</h3>
+                                <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-brand-primary dark:text-white">Coverage Hub</h3>
                                 <p className="text-[10px] font-black uppercase text-zinc-400 mt-1.5 tracking-widest">{totalAssignedItemsCount} Items Adjudicated</p>
                             </div>
                          </div>
-                         <div className="flex gap-1.5 p-1 bg-amazio-light-bg dark:bg-black/40 rounded-full border border-amazio-primary/5 dark:border-white/10 shadow-inner">
+                         <div className="flex gap-1.5 p-1 bg-brand-light-bg dark:bg-black/40 rounded-full border border-brand-primary/5 dark:border-white/10 shadow-inner">
                             <button onClick={() => { setAssignmentMode('BY_ITEM'); setSelectedPrimaryId(null); }} className={`px-4 py-1.5 text-[10px] font-black uppercase rounded-full transition-all ${assignmentMode === 'BY_ITEM' ? 'bg-white dark:bg-indigo-500 text-indigo-600 dark:text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-600'}`}>By Item</button>
                             <button onClick={() => { setAssignmentMode('BY_JUDGE'); setSelectedPrimaryId(null); }} className={`px-4 py-1.5 text-[10px] font-black uppercase rounded-full transition-all ${assignmentMode === 'BY_JUDGE' ? 'bg-white dark:bg-indigo-500 text-indigo-600 dark:text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-600'}`}>By Judge</button>
                         </div>
@@ -535,7 +535,7 @@ const JudgesManagement: React.FC = () => {
                         {filteredPrimaryList.length === 0 && (
                             <div className="col-span-full py-24 flex flex-col items-center justify-center opacity-30">
                                 <Search size={64} strokeWidth={1} />
-                                <p className="font-black uppercase tracking-[0.3em] text-xs mt-4">No matching scope found</p>
+                                <p className="font-black uppercase tracking-[0.3em] text-xs mt-4">No matching category found</p>
                             </div>
                         )}
                     </div>
@@ -574,7 +574,7 @@ const JudgesManagement: React.FC = () => {
                             )}
                             <button 
                                 onClick={() => { setIsEditingJudge(null); setIsJudgeModalOpen(true); }}
-                                className="bg-amazio-primary text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase shadow-lg shadow-amazio-primary/20 active:scale-95 transition-all flex items-center gap-2"
+                                className="bg-brand-primary text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase shadow-lg shadow-brand-primary/20 active:scale-95 transition-all flex items-center gap-2"
                             >
                                 <Plus size={12} strokeWidth={3}/> New Official
                             </button>
@@ -605,7 +605,7 @@ const JudgesManagement: React.FC = () => {
                                             </div>
                                         </div>
                                         <div>
-                                            <h3 className="font-black text-lg text-amazio-primary dark:text-white leading-tight truncate">{j.name}</h3>
+                                            <h3 className="font-black text-lg text-brand-primary dark:text-white leading-tight truncate">{j.name}</h3>
                                             {j.profession && (
                                                 <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-500/80 mt-1 truncate">{j.profession}</p>
                                             )}

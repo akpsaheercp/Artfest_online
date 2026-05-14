@@ -108,7 +108,7 @@ const EntityManager = <T extends { id: string; name: string }>({
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder={`Search ${type.toLowerCase()}s...`} 
-                        className="w-full pl-11 pr-4 py-3 rounded-2xl bg-zinc-100 dark:bg-zinc-800/80 text-sm font-medium focus:ring-2 focus:ring-amazio-primary/20 outline-none transition-all shadow-inner border-none"
+                        className="w-full pl-11 pr-4 py-3 rounded-2xl bg-zinc-100 dark:bg-zinc-800/80 text-sm font-medium focus:ring-2 focus:ring-brand-primary/20 outline-none transition-all shadow-inner border-none"
                     />
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
@@ -122,7 +122,7 @@ const EntityManager = <T extends { id: string; name: string }>({
                     )}
                     <button 
                         onClick={onAdd}
-                        className="flex items-center gap-2 px-6 py-3 bg-amazio-primary text-white rounded-2xl hover:bg-amazio-secondary transition-all shadow-lg shadow-amazio-primary/20 active:scale-95 text-xs font-black uppercase tracking-widest"
+                        className="flex items-center gap-2 px-6 py-3 bg-brand-primary text-white rounded-2xl hover:bg-brand-secondary transition-all shadow-lg shadow-brand-primary/20 active:scale-95 text-xs font-black uppercase tracking-widest"
                     >
                         <Plus size={18} strokeWidth={3} /> New {type === 'TEAM' ? 'Team' : 'Category'}
                     </button>
@@ -146,7 +146,7 @@ const EntityManager = <T extends { id: string; name: string }>({
                         <div 
                             key={item.id}
                             onClick={() => toggleSelect(item.id)}
-                            className={`group relative bg-white dark:bg-zinc-900/40 transition-all duration-300 rounded-[2.5rem] p-6 flex flex-col justify-between h-full cursor-pointer border-none ${isSelected ? `bg-amazio-secondary/10 ring-4 ring-amazio-secondary/5 scale-[1.02] shadow-xl` : 'hover:bg-zinc-50 dark:hover:bg-zinc-800/60 shadow-sm'}`}
+                            className={`group relative bg-white dark:bg-zinc-900/40 transition-all duration-300 rounded-[2.5rem] p-6 flex flex-col justify-between h-full cursor-pointer border-none ${isSelected ? `bg-brand-secondary/10 ring-4 ring-brand-secondary/5 scale-[1.02] shadow-xl` : 'hover:bg-zinc-50 dark:hover:bg-zinc-800/60 shadow-sm'}`}
                         >
                             <div className="space-y-4">
                                 <div className="flex justify-between items-start">
@@ -156,36 +156,36 @@ const EntityManager = <T extends { id: string; name: string }>({
                                     <div className="flex gap-2">
                                         <button 
                                             onClick={(e) => { e.stopPropagation(); onUpdate(item); }}
-                                            className={`p-2 rounded-xl transition-all opacity-0 group-hover:opacity-100 focus-within:opacity-100 ${isSelected ? 'text-amazio-secondary hover:bg-amazio-secondary/10' : 'text-zinc-300 hover:text-amazio-primary hover:bg-zinc-100 dark:hover:bg-white/5'}`}
+                                            className={`p-2 rounded-xl transition-all opacity-0 group-hover:opacity-100 focus-within:opacity-100 ${isSelected ? 'text-brand-secondary hover:bg-brand-secondary/10' : 'text-zinc-300 hover:text-brand-primary hover:bg-zinc-100 dark:hover:bg-white/5'}`}
                                         >
                                             <Edit3 size={18} />
                                         </button>
-                                        {isSelected && <div className="p-2 bg-amazio-secondary rounded-xl text-white shadow-inner"><Check size={18} strokeWidth={3} /></div>}
+                                        {isSelected && <div className="p-2 bg-brand-secondary rounded-xl text-white shadow-inner"><Check size={18} strokeWidth={3} /></div>}
                                     </div>
                                 </div>
 
                                 <div>
-                                    <h4 className={`text-xl font-black uppercase tracking-tight leading-tight mb-1 truncate ${isSelected ? 'text-amazio-primary dark:text-white' : 'text-zinc-800 dark:text-zinc-100'}`}>
+                                    <h4 className={`text-xl font-black uppercase tracking-tight leading-tight mb-1 truncate ${isSelected ? 'text-brand-primary dark:text-white' : 'text-zinc-800 dark:text-zinc-100'}`}>
                                         {item.name}
                                     </h4>
                                     
                                     {type === 'CATEGORY' && category && (
                                         <div className="flex items-center gap-2 mt-3">
                                             <span className={`px-2.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-widest ${category.isGeneralCategory ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' : 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400'}`}>
-                                                {category.isGeneralCategory ? 'General Scope' : 'Standard Level'}
+                                                {category.isGeneralCategory ? 'General Category' : 'Standard Level'}
                                             </span>
                                         </div>
                                     )}
 
                                     {type === 'TEAM' && (
                                         <div className="space-y-2 mt-4">
-                                            <div className={`flex items-center gap-2 ${isSelected ? 'text-amazio-primary/60' : 'text-zinc-400'}`}>
+                                            <div className={`flex items-center gap-2 ${isSelected ? 'text-brand-primary/60' : 'text-zinc-400'}`}>
                                                 <ShieldCheck size={14} className="shrink-0" />
                                                 <span className="text-[10px] font-black uppercase tracking-widest truncate">
                                                     Lead: {leaders.length > 0 ? leaders[0].name : 'Not Assigned'}
                                                 </span>
                                             </div>
-                                            <div className={`flex items-center gap-2 ${isSelected ? 'text-amazio-primary/60' : 'text-zinc-400'}`}>
+                                            <div className={`flex items-center gap-2 ${isSelected ? 'text-brand-primary/60' : 'text-zinc-400'}`}>
                                                 <UserCog size={14} className="shrink-0" />
                                                 <span className="text-[10px] font-black uppercase tracking-widest truncate">
                                                     Asst: {assistants.length > 0 ? assistants[0].name : 'Not Assigned'}
@@ -197,7 +197,7 @@ const EntityManager = <T extends { id: string; name: string }>({
                             </div>
 
                             <div className={`mt-6 pt-5 flex flex-col gap-4`}>
-                                <div className={`h-px w-full ${isSelected ? 'bg-amazio-secondary/10' : 'bg-zinc-100 dark:bg-zinc-800/50'}`}></div>
+                                <div className={`h-px w-full ${isSelected ? 'bg-brand-secondary/10' : 'bg-zinc-100 dark:bg-zinc-800/50'}`}></div>
                                 <div className="flex items-center justify-between">
                                     {type === 'CATEGORY' && category ? (
                                         <div className="flex gap-2">
@@ -208,7 +208,7 @@ const EntityManager = <T extends { id: string; name: string }>({
                                     ) : (
                                         <div className="flex items-center gap-2">
                                             <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} shadow-glow`}></div>
-                                            <span className={`text-[10px] font-black uppercase tracking-widest ${isSelected ? 'text-amazio-primary/60' : 'text-zinc-400'}`}>{teamParticipants.length} Participants</span>
+                                            <span className={`text-[10px] font-black uppercase tracking-widest ${isSelected ? 'text-brand-primary/60' : 'text-zinc-400'}`}>{teamParticipants.length} Participants</span>
                                         </div>
                                     )}
                                 </div>
@@ -284,7 +284,7 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({ isOpen, onClose, onSave, 
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200" onClick={onClose}>
             <div className="bg-white dark:bg-zinc-900 w-full max-w-lg rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden border-none" onClick={e => e.stopPropagation()}>
                 <div className="p-7 bg-zinc-50/50 dark:bg-white/[0.02] flex justify-between items-center">
-                    <h3 className="text-xl font-black font-serif text-amazio-primary dark:text-white uppercase tracking-tighter">{editingTeam ? 'Edit Team' : 'Create Team'}</h3>
+                    <h3 className="text-xl font-black font-serif text-brand-primary dark:text-white uppercase tracking-tighter">{editingTeam ? 'Edit Team' : 'Create Team'}</h3>
                     <button onClick={onClose} className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"><X size={20} className="text-zinc-500" /></button>
                 </div>
                 <div className="p-8 space-y-8">
@@ -328,7 +328,7 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({ isOpen, onClose, onSave, 
                     </div>
                 </div>
                 <div className="p-7 bg-zinc-50 dark:bg-zinc-900/50 flex justify-end gap-4">
-                    <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-amazio-primary transition-colors">Discard</button>
+                    <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-brand-primary transition-colors">Discard</button>
                     <button onClick={handleSave} className="px-10 py-4 bg-emerald-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-emerald-500/20 transition-all active:scale-95">Save Team</button>
                 </div>
             </div>
@@ -385,16 +385,16 @@ const CategoryFormModal: React.FC<CategoryFormModalProps> = ({ isOpen, onClose, 
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200" onClick={onClose}>
             <div className="bg-white dark:bg-zinc-900 w-full max-w-lg rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden border-none" onClick={e => e.stopPropagation()}>
                 <div className="p-7 bg-zinc-50/50 dark:bg-white/[0.02] flex justify-between items-center">
-                    <h3 className="text-xl font-black font-serif text-amazio-primary dark:text-white uppercase tracking-tighter">{editingCategory ? 'Edit Scope' : 'Add Scope'}</h3>
+                    <h3 className="text-xl font-black font-serif text-brand-primary dark:text-white uppercase tracking-tighter">{editingCategory ? 'Edit Category' : 'Add Category'}</h3>
                     <button onClick={onClose} className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"><X size={20} className="text-zinc-500" /></button>
                 </div>
                 <div className="p-8 space-y-8">
                     <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Scope Title</label>
+                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Category Title</label>
                         <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Intermediates" className="w-full p-4 bg-zinc-100 dark:bg-black/20 rounded-2xl text-lg font-bold outline-none focus:ring-2 focus:ring-amber-500/20 transition-all border-none shadow-inner" autoFocus />
                     </div>
                     <div className="space-y-4">
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Threshold Constraints</label>
+                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Maximum Participants</label>
                         <div className="grid grid-cols-3 gap-4">
                             <div><label className="block text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1.5 text-center">On Stage</label><input type="number" value={maxOnStage} onChange={(e) => setMaxOnStage(e.target.value)} placeholder="∞" className="w-full p-3 text-center bg-zinc-100 dark:bg-black/20 rounded-xl text-sm font-bold outline-none border-none shadow-sm focus:ring-2 focus:ring-amber-500/20 transition-all" /></div>
                             <div><label className="block text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1.5 text-center">Off Stage</label><input type="number" value={maxOffStage} onChange={(e) => setMaxOffStage(e.target.value)} placeholder="∞" className="w-full p-3 text-center bg-zinc-100 dark:bg-black/20 rounded-xl text-sm font-bold outline-none border-none shadow-sm focus:ring-2 focus:ring-amber-500/20 transition-all" /></div>
@@ -403,12 +403,12 @@ const CategoryFormModal: React.FC<CategoryFormModalProps> = ({ isOpen, onClose, 
                     </div>
                     <div className="flex items-center gap-4 p-5 rounded-[2rem] bg-zinc-100 dark:bg-white/[0.02] cursor-pointer shadow-sm" onClick={() => setIsGeneralCategory(!isGeneralCategory)}>
                         <div className={`w-7 h-7 rounded-xl flex items-center justify-center transition-colors ${isGeneralCategory ? 'bg-amber-500 shadow-lg' : 'bg-zinc-200 dark:bg-zinc-700'}`}>{isGeneralCategory && <Check size={16} className="text-white" strokeWidth={4} />}</div>
-                        <div><span className="text-sm font-black uppercase tracking-tight text-zinc-800 dark:text-zinc-200 block leading-none mb-1">General Category</span><span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Global scope open to all participants</span></div>
+                        <div><span className="text-sm font-black uppercase tracking-tight text-zinc-800 dark:text-zinc-200 block leading-none mb-1">General Category</span><span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Global category open to all participants</span></div>
                     </div>
                 </div>
                 <div className="p-7 bg-zinc-50 dark:bg-zinc-900/50 flex justify-end gap-4">
-                    <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-amazio-primary transition-colors">Discard</button>
-                    <button onClick={handleSave} className="px-10 py-4 bg-amber-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-amber-500/20 transition-all active:scale-95">Save Scope</button>
+                    <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-brand-primary transition-colors">Discard</button>
+                    <button onClick={handleSave} className="px-10 py-4 bg-amber-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-amber-500/20 transition-all active:scale-95">Save Category</button>
                 </div>
             </div>
         </div>, document.body
@@ -508,8 +508,8 @@ const TeamsAndCategories: React.FC = () => {
         <div className="space-y-6 sm:space-y-10 pb-24 animate-in fade-in duration-700 relative">
             <div className="hidden md:flex flex-col sm:flex-row sm:items-end justify-between gap-6">
                 <div>
-                    <h2 className="text-5xl font-black font-serif text-amazio-primary dark:text-white tracking-tighter uppercase leading-none">
-                        {activeTab === 'TEAMS' ? 'Organizational Units' : 'Participation Scopes'}
+                    <h2 className="text-5xl font-black font-serif text-brand-primary dark:text-white tracking-tighter uppercase leading-none">
+                        {activeTab === 'TEAMS' ? 'Organizational Units' : 'Participation Categories'}
                     </h2>
                     <p className="text-zinc-500 dark:text-zinc-400 mt-3 font-medium text-lg italic">
                         {activeTab === 'TEAMS' ? 'Management of house teams and leadership.' : 'Configuration of participation levels and limits.'}

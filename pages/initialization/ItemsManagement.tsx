@@ -57,8 +57,8 @@ const SortButton = <T extends string>({ label, sortKey, currentSortKey, currentS
     onClick={() => onSort(sortKey)}
     className={`flex items-center gap-1 sm:gap-1.5 px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-widest transition-all border ${
       currentSortKey === sortKey 
-      ? 'bg-amazio-primary text-white border-amazio-primary shadow-md' 
-      : 'bg-white dark:bg-zinc-800 text-zinc-500 border-zinc-200 dark:border-zinc-700 hover:border-amazio-primary'
+      ? 'bg-brand-primary text-white border-brand-primary shadow-md' 
+      : 'bg-white dark:bg-zinc-800 text-zinc-500 border-zinc-200 dark:border-zinc-700 hover:border-brand-primary'
     }`}
   >
     {label}
@@ -146,7 +146,7 @@ export const GroupEntryModal: React.FC<{ isOpen: boolean; onClose: () => void; e
             <div className="bg-white dark:bg-[#121412] w-full max-w-lg rounded-[2.5rem] shadow-2xl border border-zinc-200 dark:border-white/10 flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
                 <div className="p-7 border-b border-zinc-100 dark:border-white/5 flex justify-between items-center bg-zinc-50/50 dark:bg-white/[0.01]">
                     <div>
-                        <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-amazio-primary dark:text-white">Manage Group</h3>
+                        <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-brand-primary dark:text-white">Manage Group</h3>
                         <p className="text-[10px] font-black uppercase text-zinc-400 mt-1.5 tracking-widest">{entry.displayName}</p>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-xl transition-colors text-zinc-400"><X size={24}/></button>
@@ -179,7 +179,7 @@ export const GroupEntryModal: React.FC<{ isOpen: boolean; onClose: () => void; e
                     </div>
                 </div>
                 <div className="p-7 border-t border-zinc-100 dark:border-white/5 bg-zinc-50/50 dark:bg-white/[0.01] flex justify-end gap-4">
-                    <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-amazio-primary transition-colors">Cancel</button>
+                    <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-brand-primary transition-colors">Cancel</button>
                     <button onClick={handleSave} className="px-10 py-4 bg-emerald-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-emerald-500/20 active:scale-95 transition-all">Save Changes</button>
                 </div>
             </div>
@@ -223,8 +223,8 @@ export const ItemFormModal: React.FC<{
             <div className="bg-white dark:bg-[#121412] rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl w-full max-w-2xl flex flex-col max-h-[95vh] overflow-hidden border border-zinc-200 dark:border-white/10" onClick={e => e.stopPropagation()}>
                 <div className="p-4 sm:p-7 border-b border-zinc-100 dark:border-white/5 flex justify-between items-center bg-zinc-50/50 dark:bg-white/[0.01]">
                     <div>
-                        <h3 className="font-serif font-black text-lg sm:text-2xl text-amazio-primary dark:text-white uppercase tracking-tighter leading-none">{editingItem ? 'Edit Entry' : 'Add New Item'}</h3>
-                        <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mt-1">Configure competition scope</p>
+                        <h3 className="font-serif font-black text-lg sm:text-2xl text-brand-primary dark:text-white uppercase tracking-tighter leading-none">{editingItem ? 'Edit Entry' : 'Add New Item'}</h3>
+                        <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mt-1">Configure competition category</p>
                     </div>
                     <button onClick={onClose} className="p-1.5 sm:p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors"><X size={20} sm:size={24} className="text-zinc-400" /></button>
                 </div>
@@ -326,8 +326,8 @@ export const ItemFormModal: React.FC<{
                 </div>
 
                 <div className="p-4 sm:p-7 border-t border-zinc-100 dark:border-white/5 flex justify-end gap-2 sm:gap-4 bg-zinc-50/50 dark:bg-white/[0.01]">
-                    <button onClick={onClose} className="px-4 py-3 sm:px-6 sm:py-4 text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-amazio-primary transition-colors">Discard</button>
-                    <button onClick={handleSave} className="px-6 py-3 sm:px-10 sm:py-4 bg-amazio-primary text-white rounded-xl sm:rounded-2xl text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-amazio-primary/20 hover:scale-105 active:scale-95 transition-all">Save Registry</button>
+                    <button onClick={onClose} className="px-4 py-3 sm:px-6 sm:py-4 text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-brand-primary transition-colors">Discard</button>
+                    <button onClick={handleSave} className="px-6 py-3 sm:px-10 sm:py-4 bg-brand-primary text-white rounded-xl sm:rounded-2xl text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-brand-primary/20 hover:scale-105 active:scale-95 transition-all">Save Registry</button>
                 </div>
             </div>
         </div>,
@@ -348,12 +348,16 @@ export const ParticipantFormModal: React.FC<{
 
     useEffect(() => {
         if (editingParticipant) setFormData(editingParticipant);
-        else setFormData({
-            name: '', chestNumber: '', teamId: '', categoryId: '', itemIds: []
-        });
-    }, [editingParticipant, isOpen]);
+        else {
+            setFormData({
+                name: '', chestNumber: '', teamId: currentUser?.role === UserRole.TEAM_LEADER ? currentUser.teamId : '', categoryId: '', itemIds: []
+            });
+        }
+    }, [editingParticipant, isOpen, currentUser]);
 
     if (!isOpen || !state) return null;
+
+    const isTeamLeader = currentUser?.role === UserRole.TEAM_LEADER;
 
     const handleSave = async () => {
         if (!formData.name || !formData.teamId || !formData.categoryId) return alert("Please fill Name, Team and Category.");
@@ -367,7 +371,7 @@ export const ParticipantFormModal: React.FC<{
             <div className="bg-white dark:bg-[#121412] rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl w-full max-w-lg flex flex-col max-h-[95vh] overflow-hidden border border-zinc-200 dark:border-white/10" onClick={e => e.stopPropagation()}>
                 <div className="p-4 sm:p-7 border-b border-zinc-100 dark:border-white/5 flex justify-between items-center bg-zinc-50/50 dark:bg-white/[0.01]">
                     <div>
-                        <h3 className="font-serif font-black text-lg sm:text-2xl text-amazio-primary dark:text-white uppercase tracking-tighter leading-none">{editingParticipant ? 'Edit Profile' : 'Register Delegate'}</h3>
+                        <h3 className="font-serif font-black text-lg sm:text-2xl text-brand-primary dark:text-white uppercase tracking-tighter leading-none">{editingParticipant ? 'Edit Profile' : 'Register Delegate'}</h3>
                         <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mt-1">Manage individual identity</p>
                     </div>
                     <button onClick={onClose} className="p-1.5 sm:p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors"><X size={20} sm:size={24} className="text-zinc-400" /></button>
@@ -394,11 +398,16 @@ export const ParticipantFormModal: React.FC<{
                             <div>
                                 <label className="block text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1 sm:mb-2 ml-1">Team / House</label>
                                 <div className="relative">
-                                    <select value={formData.teamId} onChange={e => setFormData({...formData, teamId: e.target.value})} className={selectClasses}>
+                                    <select 
+                                        disabled={isTeamLeader}
+                                        value={formData.teamId} 
+                                        onChange={e => setFormData({...formData, teamId: e.target.value})} 
+                                        className={`${selectClasses} ${isTeamLeader ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    >
                                         <option value="">Select Team</option>
                                         {state.teams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                                     </select>
-                                    <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+                                    {!isTeamLeader && <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />}
                                 </div>
                             </div>
 
@@ -429,8 +438,8 @@ export const ParticipantFormModal: React.FC<{
                 </div>
 
                 <div className="p-4 sm:p-7 border-t border-zinc-100 dark:border-white/5 flex justify-end gap-2 sm:gap-4 bg-zinc-50/50 dark:bg-white/[0.01]">
-                    <button onClick={onClose} className="px-4 py-3 sm:px-6 sm:py-4 text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-amazio-primary transition-colors">Discard</button>
-                    <button onClick={handleSave} className="px-6 py-3 sm:px-10 sm:py-4 bg-indigo-600 text-white rounded-xl sm:rounded-2xl text-[8px] sm:text-[10px] font-black uppercase tracking-widest shadow-xl shadow-amazio-primary/20 hover:scale-105 active:scale-95 transition-all">Save Profile</button>
+                    <button onClick={onClose} className="px-4 py-3 sm:px-6 sm:py-4 text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-brand-primary transition-colors">Discard</button>
+                    <button onClick={handleSave} className="px-6 py-3 sm:px-10 sm:py-4 bg-indigo-600 text-white rounded-xl sm:rounded-2xl text-[8px] sm:text-[10px] font-black uppercase tracking-widest shadow-xl shadow-brand-primary/20 hover:scale-105 active:scale-95 transition-all">Save Profile</button>
                 </div>
             </div>
         </div>,
@@ -441,7 +450,14 @@ export const ParticipantFormModal: React.FC<{
 // --- Main Components ---
 
 const ItemsManagement: React.FC = () => {
-    const { state, currentUser, deleteMultipleItems, deleteMultipleParticipants, globalFilters, globalSearchTerm, itemsSubView: activeTab } = useFirebase();
+    const { state, currentUser, deleteMultipleItems, deleteMultipleParticipants, globalFilters, globalSearchTerm, itemsSubView: activeTab, setItemsSubView } = useFirebase();
+    
+    // Force PARTICIPANTS view for Team Leaders
+    useEffect(() => {
+        if (currentUser?.role === UserRole.TEAM_LEADER && activeTab !== 'PARTICIPANTS') {
+            setItemsSubView('PARTICIPANTS');
+        }
+    }, [currentUser, activeTab, setItemsSubView]);
     
     // Items State
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -601,7 +617,11 @@ const ItemsManagement: React.FC = () => {
                                  e.chestNumber.toLowerCase().includes(globalSearchTerm.toLowerCase());
             const matchesTeam = globalFilters.teamId.length > 0 ? globalFilters.teamId.includes(e.teamId) : true;
             const matchesCategory = globalFilters.categoryId.length > 0 ? globalFilters.categoryId.includes(e.categoryId) : true;
-            return matchesSearch && matchesTeam && matchesCategory;
+            
+            // Role-based filtering: Team Leaders only see their own team
+            const matchesRoleTeam = currentUser?.role === UserRole.TEAM_LEADER ? e.teamId === currentUser.teamId : true;
+
+            return matchesSearch && matchesTeam && matchesCategory && matchesRoleTeam;
         });
 
         const { sortKey, dir } = participantSort;
@@ -637,13 +657,13 @@ const ItemsManagement: React.FC = () => {
         <div className="space-y-4 sm:space-y-10 pb-10 animate-in fade-in duration-700 relative">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
                 <div>
-                    <h2 className="text-3xl sm:text-5xl font-black font-serif text-amazio-primary dark:text-white tracking-tighter uppercase leading-none">Items & Participants</h2>
+                    <h2 className="text-3xl sm:text-5xl font-black font-serif text-brand-primary dark:text-white tracking-tighter uppercase leading-none">Items & Participants</h2>
                     <p className="text-xs sm:text-lg text-zinc-500 dark:text-zinc-400 mt-2 sm:mt-3 font-medium italic">System configuration for events and delegacy.</p>
                 </div>
                 <div className="flex items-center gap-3 pb-1">
                     <div className="px-4 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-sm">
                         <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Registry:</span>
-                        <span className="ml-2 text-sm font-black text-amazio-primary dark:text-white tabular-nums">
+                        <span className="ml-2 text-sm font-black text-brand-primary dark:text-white tabular-nums">
                             {activeTab === 'ITEMS' ? filteredAndSortedItems.length : registryEntries.length}
                         </span>
                         <span className="ml-1 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Records</span>
@@ -661,7 +681,7 @@ const ItemsManagement: React.FC = () => {
                                     <SortButton label="Type" sortKey="type" currentSortKey={itemSort.sortKey} currentSortDir={itemSort.dir} onSort={handleItemSort} />
                                     <SortButton label="Perf." sortKey="performance" currentSortKey={itemSort.sortKey} currentSortDir={itemSort.dir} onSort={handleItemSort} />
                                 </div>
-                                <button onClick={() => { setEditingItem(null); setIsModalOpen(true); }} className="w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3 bg-amazio-primary text-white rounded-xl sm:rounded-2xl text-[8px] sm:text-[10px] font-black uppercase tracking-widest shadow-lg shadow-amazio-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"><Plus size={14} sm:size={16}/> New Record</button>
+                                <button onClick={() => { setEditingItem(null); setIsModalOpen(true); }} className="w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3 bg-brand-primary text-white rounded-xl sm:rounded-2xl text-[8px] sm:text-[10px] font-black uppercase tracking-widest shadow-lg shadow-brand-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"><Plus size={14} sm:size={16}/> New Record</button>
                             </div>
 
                             {selectedItems.size > 0 && ReactDOM.createPortal(
@@ -687,9 +707,9 @@ const ItemsManagement: React.FC = () => {
                                             <div className="space-y-3 sm:space-y-4 relative z-10">
                                                 <div className="flex justify-between items-start">
                                                     <div className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[7px] sm:text-[9px] font-black uppercase tracking-widest border transition-all" style={{ backgroundColor: `${theme.hex}15`, color: theme.hex, borderColor: `${theme.hex}30` }}>{cat?.name || 'N/A'}</div>
-                                                    <button onClick={(e) => { e.stopPropagation(); setEditingItem(item); setIsModalOpen(true); }} className={`p-1.5 sm:p-2 rounded-lg sm:rounded-xl transition-all opacity-0 group-hover:opacity-100 focus-within:opacity-100 ${isSelected ? 'text-zinc-600 dark:text-zinc-300 bg-white/50 opacity-100' : 'text-zinc-300 group-hover:text-amazio-primary hover:bg-zinc-100 dark:hover:bg-white/5'}`}><Edit2 size={16} sm:size={18} /></button>
+                                                    <button onClick={(e) => { e.stopPropagation(); setEditingItem(item); setIsModalOpen(true); }} className={`p-1.5 sm:p-2 rounded-lg sm:rounded-xl transition-all opacity-0 group-hover:opacity-100 focus-within:opacity-100 ${isSelected ? 'text-zinc-600 dark:text-zinc-300 bg-white/50 opacity-100' : 'text-zinc-300 group-hover:text-brand-primary hover:bg-zinc-100 dark:hover:bg-white/5'}`}><Edit2 size={16} sm:size={18} /></button>
                                                 </div>
-                                                <div><h3 className={`text-base sm:text-xl font-black uppercase tracking-tight leading-tight mb-1 sm:mb-2 transition-colors ${isSelected ? 'text-amazio-primary dark:text-white' : 'text-amazio-primary dark:text-zinc-100'}`}>{item.name}</h3></div>
+                                                <div><h3 className={`text-base sm:text-xl font-black uppercase tracking-tight leading-tight mb-1 sm:mb-2 transition-colors ${isSelected ? 'text-brand-primary dark:text-white' : 'text-brand-primary dark:text-zinc-100'}`}>{item.name}</h3></div>
                                                 <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1 sm:pt-2"><TypeBadge type={item.type} /><PerformanceBadge type={item.performanceType} /></div>
                                             </div>
                                         </div>
@@ -750,9 +770,9 @@ const ItemsManagement: React.FC = () => {
                                                             )}
                                                         </div>
                                                     </div>
-                                                    <button onClick={(e) => { e.stopPropagation(); if(isGroup) { setEditingGroupEntry(entry); setIsGroupModalOpen(true); } else { setEditingParticipant(entry); setIsParticipantModalOpen(true); } }} className={`p-1.5 sm:p-2 rounded-lg sm:rounded-xl transition-all opacity-0 group-hover:opacity-100 focus-within:opacity-100 ${isSelected ? 'text-zinc-600 dark:text-zinc-300 bg-white/50 opacity-100' : 'text-zinc-300 group-hover:text-amazio-primary hover:bg-zinc-100 dark:hover:bg-white/5'}`}><Edit2 size={16} sm:size={18} /></button>
+                                                    <button onClick={(e) => { e.stopPropagation(); if(isGroup) { setEditingGroupEntry(entry); setIsGroupModalOpen(true); } else { setEditingParticipant(entry); setIsParticipantModalOpen(true); } }} className={`p-1.5 sm:p-2 rounded-lg sm:rounded-xl transition-all opacity-0 group-hover:opacity-100 focus-within:opacity-100 ${isSelected ? 'text-zinc-600 dark:text-zinc-300 bg-white/50 opacity-100' : 'text-zinc-300 group-hover:text-brand-primary hover:bg-zinc-100 dark:hover:bg-white/5'}`}><Edit2 size={16} sm:size={18} /></button>
                                                 </div>
-                                                <div><h3 className={`text-sm sm:text-lg font-black uppercase tracking-tight leading-tight mb-0.5 sm:mb-1 transition-colors ${isSelected ? 'text-amazio-primary dark:text-white' : 'text-amazio-primary dark:text-zinc-100'}`}>{entry.displayName}</h3>{entry.place && !isGroup && <div className="text-[8px] sm:text-[10px] font-bold text-zinc-500 italic flex items-center gap-1"><MapPin size={8} sm:size={10}/> {entry.place}</div>}</div>
+                                                <div><h3 className={`text-sm sm:text-lg font-black uppercase tracking-tight leading-tight mb-0.5 sm:mb-1 transition-colors ${isSelected ? 'text-brand-primary dark:text-white' : 'text-brand-primary dark:text-zinc-100'}`}>{entry.displayName}</h3>{entry.place && !isGroup && <div className="text-[8px] sm:text-[10px] font-bold text-zinc-500 italic flex items-center gap-1"><MapPin size={8} sm:size={10}/> {entry.place}</div>}</div>
                                                 <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1 sm:pt-2">
                                                     <span className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-md sm:rounded-lg text-[7px] sm:text-[9px] font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] border" style={{ backgroundColor: `${ART_FEST_PALETTE.SAND_YELLOW}10`, color: ART_FEST_PALETTE.SAND_YELLOW, borderColor: `${ART_FEST_PALETTE.SAND_YELLOW}30` }}>{entry.displayTeam}</span>
                                                     <span className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-md sm:rounded-lg text-[7px] sm:text-[9px] font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] border" style={{ backgroundColor: `${ART_FEST_PALETTE.SOFT_BLUE}10`, color: ART_FEST_PALETTE.OCEAN_BLUE, borderColor: `${ART_FEST_PALETTE.SOFT_BLUE}30` }}>{entry.displayCategory}</span>

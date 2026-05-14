@@ -67,7 +67,7 @@ const ItemTimerPage: React.FC = () => {
                         <div className="p-2 bg-indigo-600 rounded-xl text-white shadow-lg shadow-indigo-500/20">
                             <Command size={20} />
                         </div>
-                        <h2 className="text-3xl font-black font-serif uppercase tracking-tighter text-amazio-primary dark:text-white">Timer Control Deck</h2>
+                        <h2 className="text-3xl font-black font-serif uppercase tracking-tighter text-brand-primary dark:text-white">Timer Control Deck</h2>
                     </div>
                     <p className="text-zinc-500 dark:text-zinc-400 font-medium italic">Initialize stage clock for a registered discipline.</p>
                 </div>

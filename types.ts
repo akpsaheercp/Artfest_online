@@ -26,6 +26,8 @@ export enum UserRole {
 export interface User {
     id: string; 
     username: string;
+    email?: string;
+    password?: string;
     role: UserRole;
     teamId?: string; 
     judgeId?: string; 
@@ -127,6 +129,7 @@ export interface Settings {
   autoCodeAssignment?: boolean;
   enableFloatingNav?: boolean; 
   mobileSidebarMode?: 'floating' | 'sticky'; 
+  showInPageInstructions?: boolean; 
   
   eventDays?: string[];
   stages?: string[];
@@ -166,6 +169,10 @@ export interface Settings {
   branding?: {
       eventName?: string;
       description?: string;
+      motto?: string;
+      themeSubtitle?: string;
+      shortName?: string;
+      version?: string;
       typographyUrl?: string; 
       typographyUrlLight?: string; 
       typographyUrlDark?: string; 
@@ -280,8 +287,17 @@ export interface Result {
         gradeId: string | null;
     }[];
 }
+export interface Festival {
+    id: string;
+    slug: string;
+    name: string;
+    ownerId: string;
+    createdAt: number;
+    isActive: boolean;
+}
 
 export interface AppState {
+  festId: string;
   settings: Settings;
   instructions: { [page: string]: string };
   lotPool: string[];

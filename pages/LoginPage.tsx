@@ -27,9 +27,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ theme, toggleTheme, settings }) =
         setError('');
         setLoading(true);
         try {
-            /**
-             * Fixed: Added missing `rememberMe` argument to satisfy `login` function signature.
-             */
             await login(username, password, rememberMe);
         } catch (err: any) {
             setError(err.message || 'Login failed. Please check your credentials.');
@@ -70,110 +67,88 @@ const LoginPage: React.FC<LoginPageProps> = ({ theme, toggleTheme, settings }) =
     }, [settings.branding, theme]);
 
     return (
-        <div className="relative min-h-screen flex items-center justify-center p-4 font-sans overflow-hidden transition-colors duration-500 bg-amazio-light-bg dark:bg-amazio-bg selection:bg-amazio-accent selection:text-amazio-bg">
+        <div className="relative min-h-screen flex items-center justify-center p-4 font-sans overflow-hidden transition-colors duration-1000 bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-slate-100 selection:bg-emerald-500 selection:text-white">
             
             {/* Ambient Background Glows */}
-            <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-amazio-secondary/10 dark:bg-amazio-secondary/20 rounded-full blur-[120px] pointer-events-none mix-blend-multiply dark:mix-blend-screen animate-pulse duration-[8000ms]"></div>
-            <div className="absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] bg-amazio-accent/20 dark:bg-amazio-accent/10 rounded-full blur-[120px] pointer-events-none mix-blend-multiply dark:mix-blend-screen animate-pulse duration-[10000ms]"></div>
+            <div className="absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
+            <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none animate-pulse" style={{ animationDelay: '3s' }}></div>
 
             {/* Theme Toggle */}
             <button
                 onClick={handleThemeToggle}
-                className="absolute top-6 right-6 p-3 rounded-full bg-white/40 dark:bg-white/5 border border-amazio-primary/10 dark:border-white/10 text-zinc-600 dark:text-zinc-300 hover:text-amazio-primary dark:hover:text-white backdrop-blur-md shadow-glass-light dark:shadow-glass transition-all hover:scale-105 active:scale-95 z-20 group"
-                aria-label="Toggle theme"
+                className="absolute top-8 right-8 p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-emerald-500 transition-all hover:scale-105 z-20 shadow-sm"
             >
-                <div className="group-hover:rotate-90 transition-transform duration-500">
-                    {getThemeIcon()}
-                </div>
+                {getThemeIcon()}
             </button>
 
             {/* Main Card */}
-            <div className="relative w-full max-w-md p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[#F4EEDF]/95 via-[#F4EEDF]/90 to-[#E6E0D0]/95 backdrop-blur-xl border border-white/40 shadow-2xl animate-in fade-in zoom-in-95 duration-700 z-10">
+            <div className="relative w-full max-w-md p-10 rounded-[2.5rem] bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 backdrop-blur-xl shadow-2xl animate-in fade-in zoom-in-95 duration-700 z-10">
                 
                 {/* Header / Logo */}
-                <div className="text-center mb-8 pt-2">
-                    {/* Event Typography (Replaces Icon & App Name) */}
-                    <div className="flex justify-center items-center min-h-[160px]">
-                        {logoUrl ? (
-                            <img 
-                                src={logoUrl} 
-                                alt={settings.heading} 
-                                className="w-full max-w-[400px] sm:max-w-[480px] h-auto max-h-72 object-contain filter drop-shadow-xl hover:scale-105 transition-all duration-700" 
-                            />
-                        ) : (
-                            <div className="relative">
-                                <h1 className="relative text-4xl sm:text-5xl font-black font-serif text-center leading-tight text-amazio-primary tracking-tighter drop-shadow-sm uppercase">
-                                    {settings.heading || 'AMAZIO 2026'}
-                                </h1>
-                            </div>
-                        )}
+                <div className="text-center mb-10">
+                    <div className="w-16 h-16 bg-slate-900 dark:bg-emerald-500 rounded-2xl flex items-center justify-center mx-auto shadow-xl mb-6">
+                        <Lock className="text-white dark:text-slate-950" size={32} />
                     </div>
+                    {logoUrl ? (
+                        <img 
+                            src={logoUrl} 
+                            alt={settings.heading} 
+                            className="w-full max-w-[280px] h-auto max-h-40 mx-auto object-contain filter drop-shadow-xl" 
+                        />
+                    ) : (
+                        <h1 className="text-3xl font-black uppercase tracking-tighter leading-none">
+                            System<br/><span className="text-emerald-500">Access.</span>
+                        </h1>
+                    )}
+                    <p className="mt-4 text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 dark:text-slate-400/60">Secure Operator Terminal</p>
                 </div>
 
                 {isUnassigned ? (
-                    <div className="p-5 rounded-2xl bg-white/60 border border-white/40 text-center animate-in fade-in zoom-in">
-                        <div className="flex justify-center mb-2">
-                            <div className="p-2 bg-amber-100/50 rounded-full text-amber-800">
-                                <AlertCircle size={24} />
-                            </div>
-                        </div>
-                        <h3 className="font-bold text-lg text-zinc-800 mb-1">Access Pending</h3>
-                        <p className="text-sm text-zinc-700 leading-relaxed mb-4">
-                            You are authenticated as <br/><strong className="font-mono bg-white/50 px-1 rounded">{firebaseUser?.email}</strong>
-                            <br/>but this user has not been assigned a role for Amazio 2026 yet.
-                        </p>
-                        <p className="text-xs text-zinc-600 mb-4 px-2">
-                            Please ask an Administrator to add the username <strong>"{firebaseUser?.email?.split('@')[0]}"</strong> in General Settings {'>'} Users.
+                    <div className="p-8 rounded-3xl bg-amber-500/5 border border-amber-500/20 text-center animate-in fade-in zoom-in">
+                        <AlertCircle size={40} className="mx-auto mb-4 text-amber-500" />
+                        <h3 className="font-black uppercase tracking-tight text-lg mb-2">Access Restricted</h3>
+                        <p className="text-xs text-slate-500 leading-relaxed mb-8">
+                            Identify for <strong className="text-slate-900 dark:text-white font-mono">{firebaseUser?.email}</strong> is not yet authorized in this terminal registry.
                         </p>
                         <button 
                             onClick={handleLogout}
-                            className="w-full py-3 bg-white text-zinc-700 rounded-xl font-bold text-sm hover:bg-zinc-50 border border-zinc-200 transition-colors flex items-center justify-center gap-2"
+                            className="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg transition-all"
                         >
-                            <LogOut size={16} /> Sign Out
+                            <LogOut size={16} className="inline mr-2" /> Disconnect
                         </button>
                     </div>
                 ) : (
                     /* Login Form */
-                    <form className="space-y-6" onSubmit={handleSubmit}>
-                        <div className="space-y-4">
+                    <form className="space-y-4" onSubmit={handleSubmit}>
+                        <div className="space-y-3">
                             {/* Username Input */}
                             <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <User className="h-5 w-5 text-zinc-500 group-focus-within:text-amazio-primary transition-colors" />
-                                </div>
+                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors" size={18} />
                                 <input
-                                    id="username"
-                                    name="username"
                                     type="text"
-                                    autoComplete="username"
                                     required
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
-                                    className="block w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white/80 border border-white/50 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amazio-primary/20 focus:border-transparent transition-all backdrop-blur-sm"
-                                    placeholder="Username"
+                                    className="w-full pl-12 pr-4 py-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 outline-none transition-all font-bold text-sm focus:ring-2 focus:ring-emerald-500/20"
+                                    placeholder="Operator Handle"
                                 />
                             </div>
 
                             {/* Password Input */}
                             <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <Lock className="h-5 w-5 text-zinc-500 group-focus-within:text-amazio-primary transition-colors" />
-                                </div>
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors" size={18} />
                                 <input
-                                    id="password"
-                                    name="password"
                                     type={showPassword ? "text" : "password"}
-                                    autoComplete="current-password"
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="block w-full pl-11 pr-12 py-3.5 rounded-2xl bg-white/80 border border-white/50 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amazio-primary/20 focus:border-transparent transition-all backdrop-blur-sm"
-                                    placeholder="Password"
+                                    className="w-full pl-12 pr-12 py-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 outline-none transition-all font-bold text-sm focus:ring-2 focus:ring-emerald-500/20"
+                                    placeholder="Access Key"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-zinc-400 hover:text-amazio-primary transition-colors"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-500 transition-colors"
                                 >
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
@@ -181,41 +156,24 @@ const LoginPage: React.FC<LoginPageProps> = ({ theme, toggleTheme, settings }) =
                         </div>
                         
                         {/* Remember Me */}
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between py-2">
                             <label className="flex items-center cursor-pointer group">
-                                <div className="relative flex items-center">
-                                    <input
-                                        id="remember-me"
-                                        name="remember-me"
-                                        type="checkbox"
-                                        checked={rememberMe}
-                                        onChange={(e) => setRememberMe(e.target.checked)}
-                                        className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-zinc-400 bg-white/40 checked:bg-amazio-primary checked:border-transparent transition-all"
-                                    />
-                                    <svg
-                                        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity"
-                                        viewBox="0 0 14 14"
-                                        fill="none"
-                                    >
-                                        <path
-                                            d="M3 8L6 11L11 3.5"
-                                            stroke="currentColor"
-                                            strokeWidth="3"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        />
-                                    </svg>
-                                </div>
-                                <span className="ml-3 text-sm text-zinc-700 font-medium group-hover:text-amazio-primary transition-colors">
-                                    Keep me signed in
+                                <input
+                                    type="checkbox"
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
+                                    className="h-4 w-4 rounded border-slate-300 text-emerald-500 focus:ring-emerald-500/20"
+                                />
+                                <span className="ml-3 text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-emerald-500 transition-colors">
+                                    Persistent Session
                                 </span>
                             </label>
                         </div>
 
                         {/* Error Message */}
                         {error && (
-                            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-center animate-in fade-in slide-in-from-top-1">
-                                <p className="text-sm font-bold text-red-700">{error}</p>
+                            <div className="py-2 text-rose-500 text-[9px] font-black uppercase tracking-widest text-center animate-in slide-in-from-top-1">
+                                {error}
                             </div>
                         )}
 
@@ -223,30 +181,17 @@ const LoginPage: React.FC<LoginPageProps> = ({ theme, toggleTheme, settings }) =
                         <button
                             type="submit"
                             disabled={loading}
-                            className="group relative w-full flex items-center justify-center gap-2 py-4 px-4 border border-transparent text-sm font-bold uppercase tracking-wider rounded-xl text-white bg-amazio-primary shadow-lg hover:bg-amazio-primary/90 transform hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
+                            className="w-full py-5 bg-slate-900 dark:bg-emerald-500 text-white dark:text-slate-950 rounded-xl font-black uppercase tracking-[0.4em] text-[10px] shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
                         >
-                            {loading ? (
-                                <>
-                                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    Authenticating...
-                                </>
-                            ) : (
-                                <>
-                                    <span>Enter Console</span>
-                                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                </>
-                            )}
+                            {loading ? 'Authorizing...' : 'Enter System'}
                         </button>
                     </form>
                 )}
 
                 {/* Footer Watermark */}
-                <div className="mt-8 text-center">
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-bold opacity-70">
-                        Amazio 2026 Edition • Secure System
+                <div className="mt-10 text-center">
+                    <p className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-400 dark:text-slate-600">
+                        V6.5.0 ENTERPRISE CORE • SECURE
                     </p>
                 </div>
             </div>

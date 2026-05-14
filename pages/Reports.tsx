@@ -8,7 +8,7 @@ import { useFirebase } from '../hooks/useFirebase';
 import { Item, ItemType, Participant, PerformanceType, ResultStatus, ScheduledEvent } from '../types';
 
 const CountBadge = ({ count, label = '' }: { count: number, label?: string }) => (
-    <div className="absolute top-2 right-2 bg-amazio-secondary dark:bg-amazio-accent text-white dark:text-amazio-bg text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm z-10 border border-white dark:border-zinc-800 animate-in fade-in zoom-in duration-300">
+    <div className="absolute top-2 right-2 bg-brand-secondary dark:bg-brand-accent text-white dark:text-brand-bg text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm z-10 border border-white dark:border-zinc-800 animate-in fade-in zoom-in duration-300">
         {count} {label}
     </div>
 );
@@ -342,7 +342,7 @@ const ReportsPage: React.FC = () => {
                     `).join('')}
                     ${relevantItems.length === 0 ? '<div style="text-align:center; padding: 20px; color:#ccc; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1px;">No Items Registered</div>' : ''}
                 </div>
-                <div class="id-footer">${state?.settings.branding?.eventName || 'Art Fest 2026'}</div>
+                <div class="id-footer">${state?.settings.branding?.eventName || state?.settings.heading || 'Art Fest'}</div>
             </div>
         `;
     });
@@ -696,7 +696,7 @@ const ReportsPage: React.FC = () => {
             <div className="bg-white dark:bg-[#121412] w-full max-w-md rounded-[2.5rem] shadow-2xl border border-zinc-200 dark:border-white/10 flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
                 <div className="p-6 border-b border-zinc-100 dark:border-white/5 flex justify-between items-center bg-zinc-50/50 dark:bg-white/[0.01]">
                     <div>
-                        <h3 className="text-xl font-black font-serif uppercase tracking-tighter text-amazio-primary dark:text-white">Configure Layout</h3>
+                        <h3 className="text-xl font-black font-serif uppercase tracking-tighter text-brand-primary dark:text-white">Configure Layout</h3>
                         <p className="text-[10px] font-black uppercase text-zinc-400 mt-1 tracking-widest">Global Print Settings</p>
                     </div>
                     <button onClick={() => setIsSettingsOpen(false)} className="p-2 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-xl transition-colors text-zinc-400"><X size={24}/></button>
@@ -755,7 +755,7 @@ const ReportsPage: React.FC = () => {
                 <div className="p-6 border-t border-zinc-100 dark:border-white/5 bg-zinc-50/50 dark:bg-white/[0.01]">
                     <button 
                         onClick={() => setIsSettingsOpen(false)}
-                        className="w-full py-4 bg-amazio-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all"
+                        className="w-full py-4 bg-brand-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all"
                     >
                         Apply Changes
                     </button>
@@ -782,21 +782,114 @@ const ReportsPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-             <Card title="Prize Holders" action={<button onClick={generatePrizeWinnersReport} className="text-indigo-600 hover:text-indigo-800"><Printer size={20}/></button>}> 
+             <Card 
+                title="Prize Holders" 
+                onClick={generatePrizeWinnersReport}
+                action={<button onClick={(e) => { e.stopPropagation(); generatePrizeWinnersReport(); }} className="text-indigo-600 hover:text-indigo-800"><Printer size={20}/></button>}
+             > 
                 <div className="text-center p-4"> 
                     <Crown className="h-12 w-12 mx-auto text-yellow-600 mb-2" /> 
                     <p className="text-sm text-zinc-500">Comprehensive list of winners by items and points.</p> 
                 </div> 
              </Card>
-             <Card title="Declared Results" action={<button onClick={generateResultsReport} className="text-indigo-600 hover:text-indigo-800"><Trophy size={20}/></button>}> {filteredResults.length > 0 && <CountBadge count={filteredResults.length} />} <div className="text-center p-4"> <Trophy className="h-12 w-12 mx-auto text-rose-400 mb-2" /> <p className="text-sm text-zinc-500">Published results by Single/Group.</p> </div> </Card>
-             <Card title="Participants" action={<button onClick={() => generateParticipantProfiles(isPaginated)} className="text-indigo-600 hover:text-indigo-800"><Printer size={20}/></button>}> {filteredParticipants.length > 0 && <CountBadge count={filteredParticipants.length} />} <div className="text-center p-4"> <FileText className="h-12 w-12 mx-auto text-indigo-400 mb-2" /> <p className="text-sm text-zinc-500">Generate profiles for participants.</p> </div> </Card>
-             <Card title="ID Cards" action={<button onClick={generateIDCards} className="text-indigo-600 hover:text-indigo-800"><UserSquare2 size={20}/></button>}> {filteredParticipants.length > 0 && <CountBadge count={filteredParticipants.length} />} <div className="text-center p-4"> <UserSquare2 className="h-12 w-12 mx-auto text-purple-400 mb-2" /> <p className="text-sm text-zinc-500">Printable ID cards for all participants.</p> </div> </Card>
-             <Card title="Reporting List" action={<button onClick={generateItemsChecklist} className="text-indigo-600 hover:text-indigo-800"><CheckSquare size={20}/></button>}> {filteredItems.length > 0 && <CountBadge count={filteredItems.length} />} <div className="text-center p-4"> <Layers className="h-12 w-12 mx-auto text-emerald-400 mb-2" /> <p className="text-sm text-zinc-500">Checklists by single or group registry.</p> </div> </Card>
-             <Card title="Valuation Sheet" action={<button onClick={generateValuationSheet} className="text-indigo-600 hover:text-indigo-800"><FileCheck size={20}/></button>}> {filteredItems.length > 0 && <CountBadge count={filteredItems.length} />} <div className="text-center p-4"> <FileCheck className="h-12 w-12 mx-auto text-amber-500 mb-2" /> <p className="text-sm text-zinc-500">Anonymous scoring sheets for judges.</p> </div> </Card>
-             <Card title="Checklist Matrix" action={<button onClick={generateParticipantItemChecklist} className="text-indigo-600 hover:text-indigo-800"><Grid3X3 size={20}/></button>}> {filteredItems.length > 0 && <CountBadge count={filteredItems.length} />} <div className="text-center p-4"> <Grid3X3 className="h-12 w-12 mx-auto text-teal-400 mb-2" /> <p className="text-sm text-zinc-500">Cross-reference grid.</p> </div> </Card>
-             <Card title="Writing Template" action={<button onClick={() => generateTemplatePage(true)} className="text-indigo-600 hover:text-indigo-800"><File size={20}/></button>}> <div className="text-center p-4"> <File className="h-12 w-12 mx-auto text-slate-400 mb-2" /> <p className="text-sm text-zinc-500">Blank or lined pages with event watermark.</p> </div> </Card>
-             <Card title="Program Manual" action={<button onClick={generateProgramManual} className="text-indigo-600 hover:text-indigo-800"><Book size={20}/></button>}> {filteredItems.length > 0 && <CountBadge count={filteredItems.length} />} <div className="text-center p-4"> <Book className="h-12 w-12 mx-auto text-orange-400 mb-2" /> <p className="text-sm text-zinc-500">Handbook with rules and details.</p> </div> </Card>
-             <Card title="Schedule" action={<button onClick={generateScheduleReport} className="text-indigo-600 hover:text-indigo-800"><Calendar size={20}/></button>}> {filteredSchedule.length > 0 && <CountBadge count={filteredSchedule.length} />} <div className="text-center p-4"> <Calendar className="h-12 w-12 mx-auto text-amber-400 mb-2" /> <p className="text-sm text-zinc-500">Detailed event schedule and timeline.</p> </div> </Card>
+             <Card 
+                title="Declared Results" 
+                onClick={generateResultsReport}
+                action={<button onClick={(e) => { e.stopPropagation(); generateResultsReport(); }} className="text-indigo-600 hover:text-indigo-800"><Trophy size={20}/></button>}
+             > 
+                {filteredResults.length > 0 && <CountBadge count={filteredResults.length} />} 
+                <div className="text-center p-4"> 
+                    <Trophy className="h-12 w-12 mx-auto text-rose-400 mb-2" /> 
+                    <p className="text-sm text-zinc-500">Published results by Single/Group.</p> 
+                </div> 
+             </Card>
+             <Card 
+                title="Participants" 
+                onClick={() => generateParticipantProfiles(isPaginated)}
+                action={<button onClick={(e) => { e.stopPropagation(); generateParticipantProfiles(isPaginated); }} className="text-indigo-600 hover:text-indigo-800"><Printer size={20}/></button>}
+             > 
+                {filteredParticipants.length > 0 && <CountBadge count={filteredParticipants.length} />} 
+                <div className="text-center p-4"> 
+                    <FileText className="h-12 w-12 mx-auto text-indigo-400 mb-2" /> 
+                    <p className="text-sm text-zinc-500">Generate profiles for participants.</p> 
+                </div> 
+             </Card>
+             <Card 
+                title="ID Cards" 
+                onClick={generateIDCards}
+                action={<button onClick={(e) => { e.stopPropagation(); generateIDCards(); }} className="text-indigo-600 hover:text-indigo-800"><UserSquare2 size={20}/></button>}
+             > 
+                {filteredParticipants.length > 0 && <CountBadge count={filteredParticipants.length} />} 
+                <div className="text-center p-4"> 
+                    <UserSquare2 className="h-12 w-12 mx-auto text-purple-400 mb-2" /> 
+                    <p className="text-sm text-zinc-500">Printable ID cards for all participants.</p> 
+                </div> 
+             </Card>
+             <Card 
+                title="Reporting List" 
+                onClick={generateItemsChecklist}
+                action={<button onClick={(e) => { e.stopPropagation(); generateItemsChecklist(); }} className="text-indigo-600 hover:text-indigo-800"><CheckSquare size={20}/></button>}
+             > 
+                {filteredItems.length > 0 && <CountBadge count={filteredItems.length} />} 
+                <div className="text-center p-4"> 
+                    <Layers className="h-12 w-12 mx-auto text-emerald-400 mb-2" /> 
+                    <p className="text-sm text-zinc-500">Checklists by single or group registry.</p> 
+                </div> 
+             </Card>
+             <Card 
+                title="Valuation Sheet" 
+                onClick={generateValuationSheet}
+                action={<button onClick={(e) => { e.stopPropagation(); generateValuationSheet(); }} className="text-indigo-600 hover:text-indigo-800"><FileCheck size={20}/></button>}
+             > 
+                {filteredItems.length > 0 && <CountBadge count={filteredItems.length} />} 
+                <div className="text-center p-4"> 
+                    <FileCheck className="h-12 w-12 mx-auto text-amber-500 mb-2" /> 
+                    <p className="text-sm text-zinc-500">Anonymous scoring sheets for judges.</p> 
+                </div> 
+             </Card>
+             <Card 
+                title="Checklist Matrix" 
+                onClick={generateParticipantItemChecklist}
+                action={<button onClick={(e) => { e.stopPropagation(); generateParticipantItemChecklist(); }} className="text-indigo-600 hover:text-indigo-800"><Grid3X3 size={20}/></button>}
+             > 
+                {filteredItems.length > 0 && <CountBadge count={filteredItems.length} />} 
+                <div className="text-center p-4"> 
+                    <Grid3X3 className="h-12 w-12 mx-auto text-teal-400 mb-2" /> 
+                    <p className="text-sm text-zinc-500">Cross-reference grid.</p> 
+                </div> 
+             </Card>
+             <Card 
+                title="Writing Template" 
+                onClick={() => generateTemplatePage(true)}
+                action={<button onClick={(e) => { e.stopPropagation(); generateTemplatePage(true); }} className="text-indigo-600 hover:text-indigo-800"><File size={20}/></button>}
+             > 
+                <div className="text-center p-4"> 
+                    <File className="h-12 w-12 mx-auto text-slate-400 mb-2" /> 
+                    <p className="text-sm text-zinc-500">Blank or lined pages with event watermark.</p> 
+                </div> 
+             </Card>
+             <Card 
+                title="Program Manual" 
+                onClick={generateProgramManual}
+                action={<button onClick={(e) => { e.stopPropagation(); generateProgramManual(); }} className="text-indigo-600 hover:text-indigo-800"><Book size={20}/></button>}
+             > 
+                {filteredItems.length > 0 && <CountBadge count={filteredItems.length} />} 
+                <div className="text-center p-4"> 
+                    <Book className="h-12 w-12 mx-auto text-orange-400 mb-2" /> 
+                    <p className="text-sm text-zinc-500">Handbook with rules and details.</p> 
+                </div> 
+             </Card>
+             <Card 
+                title="Schedule" 
+                onClick={generateScheduleReport}
+                action={<button onClick={(e) => { e.stopPropagation(); generateScheduleReport(); }} className="text-indigo-600 hover:text-indigo-800"><Calendar size={20}/></button>}
+             > 
+                {filteredSchedule.length > 0 && <CountBadge count={filteredSchedule.length} />} 
+                <div className="text-center p-4"> 
+                    <Calendar className="h-12 w-12 mx-auto text-amber-400 mb-2" /> 
+                    <p className="text-sm text-zinc-500">Detailed event schedule and timeline.</p> 
+                </div> 
+             </Card>
         </div>
         
         {isSettingsOpen && <CustomizationModal />}

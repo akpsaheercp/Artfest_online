@@ -15,10 +15,12 @@ import DashboardPage from './pages/Dashboard';
 import CreativeStudio from './pages/CreativeStudio'; 
 import ItemTimerPage from './pages/ItemTimer';
 import ProjectorView from './pages/ProjectorView'; 
-import LandingPage from './pages/LandingPage';
+import PortalPage from './pages/PortalPage';
+import FestLandingPage from './pages/FestLandingPage';
 import InstructionDisplay from './components/InstructionDisplay';
 import FloatingNavRail from './components/FloatingNavRail';
 import GlobalFontManager from './components/GlobalFontManager';
+import OnboardingTour from './components/OnboardingTour';
 
 import GeneralSettings from './pages/initialization/GeneralSettings';
 import TeamsAndCategories from './pages/initialization/TeamsAndCategories';
@@ -30,13 +32,14 @@ type Theme = 'light' | 'dark' | 'system';
 
 const App: React.FC = () => {
   const { 
-    state, currentUser, loading, logout, hasPermission,
+    state, currentFestival, currentUser, loading, logout, hasPermission,
     dataEntryView, setDataEntryView,
     itemsSubView, setItemsSubView,
     teamsSubView, setTeamsSubView,
     gradeSubView, setGradeSubView,
     judgesSubView, setJudgesSubView,
     settingsSubView, setSettingsSubView,
+    isOnboardingOpen, setIsOnboardingOpen,
     setGlobalFilters, setGlobalSearchTerm
   } = useFirebase();
 
@@ -302,6 +305,7 @@ const App: React.FC = () => {
   };
 
   const renderContent = () => {
+    if (!state) return <FestLandingPage theme={theme} toggleTheme={(t) => toggleTheme(t)} settings={{} as any} />;
     if (!hasPermission(activeTab)) {
       return (
         <div className="p-8 text-center bg-red-50 dark:bg-white/5 backdrop-blur-md rounded-2xl border border-red-500/20 m-8">
@@ -311,7 +315,7 @@ const App: React.FC = () => {
       );
     }
     switch (activeTab) {
-      case TABS.LANDING: return <LandingPage theme={theme} toggleTheme={(t) => toggleTheme(t)} settings={state.settings} />;
+      case TABS.LANDING: return <FestLandingPage theme={theme} toggleTheme={(t) => toggleTheme(t)} settings={state.settings} />;
       case TABS.GENERAL_SETTINGS: return <GeneralSettings />;
       case TABS.TEAMS_CATEGORIES: return <TeamsAndCategories />;
       case TABS.ITEMS: return <ItemsManagement />;
@@ -326,31 +330,36 @@ const App: React.FC = () => {
       case TABS.CREATIVE_STUDIO: return <CreativeStudio isMobile={isMobile} />;
       case TABS.PROJECTOR: return <ProjectorView onNavigate={handleSetActiveTab} />;
       case TABS.DASHBOARD: return <DashboardPage setActiveTab={handleSetActiveTab} theme={theme} />;
-      default: return <LandingPage theme={theme} toggleTheme={(t) => toggleTheme(t)} settings={state.settings} />;
+      default: return <FestLandingPage theme={theme} toggleTheme={(t) => toggleTheme(t)} settings={state.settings} />;
     }
   };
 
-  if (loading || !state) {
+  if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-amazio-light-bg dark:bg-amazio-bg transition-colors">
+      <div className="flex items-center justify-center min-h-screen bg-brand-light-bg dark:bg-brand-bg transition-colors">
         <div className="text-center relative">
           <div className="absolute inset-0 bg-emerald-500/10 blur-xl rounded-full"></div>
           <svg className="animate-spin h-12 w-12 text-emerald-600 dark:text-emerald-400 mx-auto relative z-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <p className="mt-6 text-amazio-primary dark:text-zinc-400 font-medium tracking-wide relative z-10">INITIALIZING AMAZIO OS...</p>
+          <p className="mt-6 text-brand-primary dark:text-zinc-400 font-medium tracking-wide relative z-10 uppercase font-black text-[10px] tracking-[0.4em]">Initializing Core OS...</p>
         </div>
       </div>
     );
   }
 
+  // If no festival is selected, show the Portal Page
+  if (!currentFestival) {
+      return <PortalPage />;
+  }
+
   if (activeTab === TABS.LANDING) {
-     return <LandingPage theme={theme} toggleTheme={(t) => toggleTheme(t)} settings={state.settings} />;
+     return <FestLandingPage theme={theme} toggleTheme={(t) => toggleTheme(t)} settings={state?.settings || {} as any} />;
   }
 
   if (!currentUser && !hasPermission(activeTab)) {
-    return <LandingPage theme={theme} toggleTheme={(t) => toggleTheme(t)} settings={state.settings} />;
+    return <FestLandingPage theme={theme} toggleTheme={(t) => toggleTheme(t)} settings={state?.settings || {} as any} />;
   }
 
   if (isProjectorMode) {
@@ -366,7 +375,7 @@ const App: React.FC = () => {
   const isFullHeightTab = activeTab === TABS.CREATIVE_STUDIO || activeTab === TABS.ITEM_TIMER;
 
   return (
-    <div className="relative min-h-screen flex font-sans overflow-hidden text-amazio-primary dark:text-zinc-100 bg-amazio-light-bg dark:bg-amazio-bg">
+    <div className="relative min-h-screen flex font-sans overflow-hidden text-brand-primary dark:text-zinc-100 bg-brand-light-bg dark:bg-brand-bg">
       <GlobalFontManager />
       {currentUser && isMobile && state.settings.enableFloatingNav === true && !isSidebarExpanded && !isMobileSticky && (
         <FloatingNavRail activeTab={activeTab} setActiveTab={handleSetActiveTab} hasPermission={hasPermission} />
@@ -386,7 +395,7 @@ const App: React.FC = () => {
                     <div className="h-14"></div>
                   </div>
                 )}
-                {activeTab !== TABS.CREATIVE_STUDIO && activeTab !== TABS.ITEM_TIMER && <InstructionDisplay pageTitle={activeTab} />}
+                {activeTab !== TABS.CREATIVE_STUDIO && activeTab !== TABS.ITEM_TIMER && state?.settings.showInPageInstructions && <InstructionDisplay pageTitle={activeTab} />}
                 {renderContent()}
             </div>
             {!isFullHeightTab && <div className="h-12 md:h-16"></div>}

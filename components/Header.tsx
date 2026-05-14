@@ -82,7 +82,7 @@ const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, handleLogout, c
                 ];
             case TABS.ITEMS:
                 return [
-                    { id: 'ITEMS', label: 'Item Registry', icon: LayoutList, active: itemsSubView === 'ITEMS', onClick: () => setItemsSubView('ITEMS') },
+                    ...(currentUser?.role !== UserRole.TEAM_LEADER ? [{ id: 'ITEMS', label: 'Item Registry', icon: LayoutList, active: itemsSubView === 'ITEMS', onClick: () => setItemsSubView('ITEMS') }] : []),
                     { id: 'PARTICIPANTS', label: 'Participants Registry', icon: Users, active: itemsSubView === 'PARTICIPANTS', onClick: () => setItemsSubView('PARTICIPANTS') }
                 ];
             case TABS.TEAMS_CATEGORIES:
@@ -113,15 +113,15 @@ const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, handleLogout, c
     }, [pageTitle, dataEntryView, itemsSubView, teamsSubView, gradeSubView, judgesSubView, settingsSubView]);
 
     return (
-        <header className={`fixed md:relative top-0 left-0 right-0 z-40 w-full transition-all duration-300 ease-in-out transform-gpu bg-amazio-light-bg dark:bg-amazio-bg md:bg-transparent pt-[env(safe-area-inset-top)] ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 md:translate-y-0 md:opacity-100'}`}>
-            <div className="md:bg-amazio-light-bg/90 md:dark:bg-amazio-bg/90 md:backdrop-blur-xl px-4 flex items-center justify-between gap-2 h-14 md:h-16 relative z-50">
+        <header className={`fixed md:relative top-0 left-0 right-0 z-40 w-full transition-all duration-300 ease-in-out transform-gpu bg-brand-light-bg dark:bg-brand-bg md:bg-transparent pt-[env(safe-area-inset-top)] ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 md:translate-y-0 md:opacity-100'}`}>
+            <div className="md:bg-brand-light-bg/90 md:dark:bg-brand-bg/90 md:backdrop-blur-xl px-4 flex items-center justify-between gap-2 h-14 md:h-16 relative z-50">
                 
                 {isMobileSearchOpen && isSearchablePage ? (
                     <div className="flex items-center w-full gap-2 animate-in slide-in-from-right-4 duration-300 py-1">
                         <button onClick={() => { setIsMobileSearchOpen(false); setGlobalSearchTerm(''); }} className="p-2 rounded-xl text-zinc-500"><ArrowLeft size={20} /></button>
                         <div className="relative flex-grow flex items-center bg-zinc-100 dark:bg-white/5 rounded-2xl border border-indigo-500/30">
                             <Search className="absolute left-3 text-indigo-500" size={16} />
-                            <input ref={mobileSearchInputRef} type="text" placeholder={`Search...`} value={globalSearchTerm} onChange={(e) => setGlobalSearchTerm(e.target.value)} className="w-full bg-transparent pl-10 pr-10 py-2 text-sm font-bold text-amazio-primary dark:text-zinc-100 outline-none" />
+                            <input ref={mobileSearchInputRef} type="text" placeholder={`Search...`} value={globalSearchTerm} onChange={(e) => setGlobalSearchTerm(e.target.value)} className="w-full bg-transparent pl-10 pr-10 py-2 text-sm font-bold text-brand-primary dark:text-zinc-100 outline-none" />
                         </div>
                     </div>
                 ) : (
@@ -139,7 +139,7 @@ const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, handleLogout, c
                                     <span className="text-[10px] font-black uppercase tracking-widest hidden xs:inline">Exit</span>
                                 </button>
                             )}
-                            <h1 onClick={onTitleClick} className="text-sm md:text-lg font-black font-serif text-amazio-primary dark:text-white tracking-tight truncate cursor-pointer hover:opacity-80 transition-opacity">{displayTitle}</h1>
+                            <h1 onClick={onTitleClick} className="text-sm md:text-lg font-black font-serif text-brand-primary dark:text-white tracking-tight truncate cursor-pointer hover:opacity-80 transition-opacity">{displayTitle}</h1>
                             
                             <div className={`hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ml-2 border ${isOnline ? 'text-emerald-600 bg-emerald-50 border-emerald-100 dark:bg-emerald-950/30 dark:border-emerald-900' : 'text-rose-600 bg-rose-50 border-rose-100 dark:bg-rose-950/30 dark:border-rose-900'}`}>
                                 {isOnline ? <Wifi size={10}/> : <WifiOff size={10}/>}
@@ -148,12 +148,12 @@ const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, handleLogout, c
                         </div>
 
                         {hasSubNavigation && (
-                            <div className="hidden lg:flex items-center gap-1 mx-4 p-1 bg-zinc-100 dark:bg-black/20 rounded-2xl border border-amazio-primary/5 dark:border-white/5 shadow-inner">
+                            <div className="hidden lg:flex items-center gap-1 mx-4 p-1 bg-zinc-100 dark:bg-black/20 rounded-2xl border border-brand-primary/5 dark:border-white/5 shadow-inner">
                                 {subNavOptions.map(opt => (
                                     <button 
                                         key={opt.id} 
                                         onClick={opt.onClick}
-                                        className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${opt.active ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-sm border border-amazio-primary/5' : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
+                                        className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${opt.active ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-sm border border-brand-primary/5' : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
                                     >
                                         <opt.icon size={14} /> {opt.label}
                                     </button>
@@ -173,7 +173,7 @@ const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, handleLogout, c
                                             placeholder="Search..." 
                                             value={globalSearchTerm}
                                             onChange={(e) => setGlobalSearchTerm(e.target.value)}
-                                            className="w-full bg-white/50 dark:bg-black/20 border border-amazio-primary/10 dark:border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs font-bold text-amazio-primary dark:text-zinc-100 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/30 transition-all shadow-inner"
+                                            className="w-full bg-white/50 dark:bg-black/20 border border-brand-primary/10 dark:border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs font-bold text-brand-primary dark:text-zinc-100 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/30 transition-all shadow-inner"
                                         />
                                     </div>
                                 </div>
@@ -186,7 +186,7 @@ const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, handleLogout, c
                                         <ChevronDown size={12} className={`transition-transform duration-300 ${isSubNavOpen ? 'rotate-180' : ''}`} />
                                     </button>
                                     {isSubNavOpen && (
-                                        <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-[#151816] border border-amazio-primary/10 dark:border-white/10 rounded-2xl shadow-2xl py-1.5 z-50 animate-in fade-in zoom-in-95 origin-top-right">
+                                        <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-[#151816] border border-brand-primary/10 dark:border-white/10 rounded-2xl shadow-2xl py-1.5 z-50 animate-in fade-in zoom-in-95 origin-top-right">
                                             {subNavOptions.map(opt => (
                                                 <button key={opt.id} onClick={() => { opt.onClick(); setIsSubNavOpen(false); }} className={`w-full flex items-center justify-between px-3 py-2.5 text-xs ${opt.active ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 font-bold' : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-white/5'}`}>
                                                     <div className="flex items-center gap-3"><opt.icon size={16} /><span>{opt.label}</span></div>
@@ -217,7 +217,7 @@ const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, handleLogout, c
                                     {getThemeIcon()}
                                 </button>
                                 {isThemeMenuOpen && (
-                                    <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-[#151816] border border-amazio-primary/10 dark:border-white/10 rounded-xl shadow-xl py-1 z-50">
+                                    <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-[#151816] border border-brand-primary/10 dark:border-white/10 rounded-xl shadow-xl py-1 z-50">
                                         <button onClick={() => { toggleTheme('light'); setIsThemeMenuOpen(false); }} className={`w-full flex items-center gap-2 px-3 py-1.5 text-xs ${theme === 'light' ? 'text-amber-600 font-bold' : 'text-zinc-600 dark:text-zinc-400'}`}><Sun size={14} /> Light</button>
                                         <button onClick={() => { toggleTheme('dark'); setIsThemeMenuOpen(false); }} className={`w-full flex items-center gap-2 px-3 py-1.5 text-xs ${theme === 'dark' ? 'text-emerald-400 font-bold' : 'text-zinc-600 dark:text-zinc-400'}`}><Moon size={14} /> Dark</button>
                                         <button onClick={() => { toggleTheme('system'); setIsThemeMenuOpen(false); }} className={`w-full flex items-center gap-2 px-3 py-1.5 text-xs ${theme === 'system' ? 'text-indigo-500 font-bold' : 'text-zinc-600 dark:text-zinc-400'}`}><Laptop size={14} /> System</button>
@@ -232,9 +232,9 @@ const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, handleLogout, c
                                         <ChevronDown size={12} className={`text-zinc-500 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
                                     </button>
                                     {isProfileOpen && (
-                                        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#151816] border border-amazio-primary/10 dark:border-white/10 rounded-xl shadow-xl py-1 z-50">
-                                            <div className="px-3 py-2 border-b border-amazio-primary/5 dark:border-white/5">
-                                                <p className="text-xs font-bold text-amazio-primary dark:text-white truncate">{currentUser?.username}</p>
+                                        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#151816] border border-brand-primary/10 dark:border-white/10 rounded-xl shadow-xl py-1 z-50">
+                                            <div className="px-3 py-2 border-b border-brand-primary/5 dark:border-white/5">
+                                                <p className="text-xs font-bold text-brand-primary dark:text-white truncate">{currentUser?.username}</p>
                                                 <p className="text-[10px] text-zinc-500 uppercase">{currentUser?.role}</p>
                                             </div>
                                             <button onClick={() => onTitleClick?.()} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-white/5"><Home size={14} /> Back to Home</button>

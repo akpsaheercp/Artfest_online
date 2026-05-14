@@ -5,7 +5,7 @@ import { User } from '../types';
 import { 
     LogOut, ChevronLeft, ChevronRight, LayoutDashboard, UserPlus, 
     Calendar, Edit3, BarChart2, FileText, Palette, Timer, Settings, 
-    Medal, Home, Monitor, Search, Pin, PinOff
+    Medal, Home, Monitor, Search, Pin, PinOff, HelpCircle
 } from 'lucide-react';
 import { useFirebase } from '../hooks/useFirebase';
 
@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     currentUser, 
     hasPermission 
 }) => {
-  const { state, updateSettings } = useFirebase();
+  const { state, updateSettings, setIsOnboardingOpen } = useFirebase();
   const [searchTerm, setSearchTerm] = useState('');
   const lowerCaseSearchTerm = searchTerm.toLowerCase().trim();
 
@@ -85,12 +85,12 @@ const Sidebar: React.FC<SidebarProps> = ({
   const isNavCollapsed = !isExpanded || isStickyMode;
   
   const containerClasses = isStickyMode 
-    ? `fixed left-0 top-0 h-full z-40 bg-white/95 dark:bg-amazio-bg/95 backdrop-blur-3xl border-r border-zinc-200 dark:border-zinc-800 shadow-2xl flex flex-col transition-all duration-300 w-[64px]`
+    ? `fixed left-0 top-0 h-full z-40 bg-white/95 dark:bg-brand-bg/95 backdrop-blur-3xl border-r border-zinc-200 dark:border-zinc-800 shadow-2xl flex flex-col transition-all duration-300 w-[64px]`
     : `${widthClass} fixed md:relative z-[999] h-screen transition-[width] duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] flex flex-col transform-gpu ${isMobile && !isExpanded ? '-translate-x-full' : 'translate-x-0'} md:translate-x-0`;
 
   const innerContainerClasses = isStickyMode 
     ? `flex flex-col h-full overflow-hidden`
-    : `absolute inset-0 m-2 md:m-3 rounded-[2rem] md:rounded-[2.5rem] bg-white/80 dark:bg-amazio-surface/95 md:backdrop-blur-3xl border border-zinc-200/50 dark:border-white/5 shadow-2xl flex flex-col overflow-hidden transition-all duration-500`;
+    : `absolute inset-0 m-2 md:m-3 rounded-[2rem] md:rounded-[2.5rem] bg-white/80 dark:bg-brand-surface/95 md:backdrop-blur-3xl border border-zinc-200/50 dark:border-white/5 shadow-2xl flex flex-col overflow-hidden transition-all duration-500`;
 
   const toggleMobileSticky = async () => {
     if (!state) return;
@@ -114,14 +114,14 @@ const Sidebar: React.FC<SidebarProps> = ({
                 className="relative flex items-center justify-center cursor-pointer group"
             >
                 <div className={`bg-gradient-to-br from-[#283618] to-[#606C38] dark:from-emerald-500 dark:to-teal-800 rounded-2xl flex items-center justify-center font-serif font-black text-white shadow-xl group-hover:rotate-12 transition-all duration-500 ${isNavCollapsed ? 'w-8 h-8 text-sm' : 'w-10 h-10 text-xl'}`}>
-                    A
+                    {state?.settings.branding?.shortName?.[0] || 'A'}
                 </div>
                 {isExpanded && !isStickyMode && (
                     <div className="ml-3 animate-in fade-in slide-in-from-left-4 duration-500">
-                        <h1 className="text-base font-black font-serif tracking-tight text-amazio-primary dark:text-zinc-100 leading-none">
-                            AMAZIO <span className="text-amazio-accent">OS.</span>
+                        <h1 className="text-base font-black font-serif tracking-tight text-brand-primary dark:text-zinc-100 leading-none">
+                            {state?.settings.branding?.shortName || 'FEST'} <span className="text-brand-accent">OS.</span>
                         </h1>
-                        <p className="text-[8px] font-black uppercase tracking-[0.2em] text-zinc-500 mt-1">Terminal 6.5</p>
+                        <p className="text-[8px] font-black uppercase tracking-[0.2em] text-zinc-500 mt-1">Terminal {state?.settings.branding?.version || '6.5'}</p>
                     </div>
                 )}
             </div>
@@ -131,13 +131,13 @@ const Sidebar: React.FC<SidebarProps> = ({
         {isExpanded && !isStickyMode && (
             <div className="px-5 mb-4">
                 <div className="relative group">
-                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-amazio-accent transition-colors" />
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-brand-accent transition-colors" />
                     <input 
                         type="text"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="Search system..."
-                        className="w-full pl-10 pr-3 py-2.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 focus:border-amazio-accent/30 rounded-2xl text-sm font-bold outline-none transition-all placeholder:text-zinc-500 dark:text-zinc-200"
+                        className="w-full pl-10 pr-3 py-2.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 focus:border-brand-accent/30 rounded-2xl text-sm font-bold outline-none transition-all placeholder:text-zinc-500 dark:text-zinc-200"
                     />
                 </div>
             </div>
@@ -224,17 +224,17 @@ const Sidebar: React.FC<SidebarProps> = ({
                 ${isExpanded && !isStickyMode ? 'p-3' : 'p-1.5 flex-col justify-center gap-2'}
             `}>
                 <div className={`
-                    shrink-0 rounded-full bg-gradient-to-tr from-[#283618] to-amazio-accent p-[1.5px] transition-all duration-500
+                    shrink-0 rounded-full bg-gradient-to-tr from-[#283618] to-brand-accent p-[1.5px] transition-all duration-500
                     ${isExpanded && !isStickyMode ? 'w-10 h-10' : 'w-8 h-8'}
                 `}>
-                    <div className="w-full h-full rounded-full bg-white dark:bg-[#0F1210] flex items-center justify-center font-black text-xs text-amazio-primary dark:text-amazio-accent uppercase">
+                    <div className="w-full h-full rounded-full bg-white dark:bg-[#0F1210] flex items-center justify-center font-black text-xs text-brand-primary dark:text-brand-accent uppercase">
                         {currentUser.username.substring(0, 2)}
                     </div>
                 </div>
 
                 {isExpanded && !isStickyMode && (
                     <div className="ml-3 min-w-0 flex-grow animate-in fade-in duration-500">
-                        <p className="text-sm font-black text-amazio-primary dark:text-zinc-100 truncate uppercase tracking-tight leading-none">{currentUser.username}</p>
+                        <p className="text-sm font-black text-brand-primary dark:text-zinc-100 truncate uppercase tracking-tight leading-none">{currentUser.username}</p>
                         <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mt-1.5">{currentUser.role.replace('_', ' ')}</p>
                     </div>
                 )}
@@ -243,7 +243,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     {!isMobile && (
                         <button 
                             onClick={toggleSidebar}
-                            className="p-2 rounded-xl text-zinc-500 hover:text-amazio-primary dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/5 transition-all"
+                            className="p-2 rounded-xl text-zinc-500 hover:text-brand-primary dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/5 transition-all"
                             title={isExpanded ? "Collapse Sidebar" : "Expand Sidebar"}
                         >
                             {isExpanded ? <ChevronLeft size={18}/> : <ChevronRight size={18}/>}
@@ -252,15 +252,22 @@ const Sidebar: React.FC<SidebarProps> = ({
 
                     {(isExpanded && !isStickyMode) || isStickyMode ? (
                         <>
-                             {isMobile && (
+                            {isMobile && (
                                 <button 
                                     onClick={toggleMobileSticky}
-                                    className="p-2 rounded-xl text-zinc-500 hover:text-amazio-accent hover:bg-amazio-accent/10 transition-all"
+                                    className="p-2 rounded-xl text-zinc-500 hover:text-brand-accent hover:bg-brand-accent/10 transition-all"
                                     title={isStickyMode ? "Floating Mode" : "Pin to Rail"}
                                 >
                                     {isStickyMode ? <PinOff size={18} /> : <Pin size={18} />}
                                 </button>
                             )}
+                            <button 
+                                onClick={() => setIsOnboardingOpen(true)}
+                                className="p-2 rounded-xl text-zinc-500 hover:text-brand-primary hover:bg-brand-primary/10 transition-all"
+                                title="Help & Tour"
+                            >
+                                <HelpCircle size={18} />
+                            </button>
                             <button 
                                 onClick={handleLogout}
                                 className="p-2 rounded-xl text-zinc-500 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-all"

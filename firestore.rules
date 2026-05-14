@@ -1,11 +1,36 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow public read for all festival data (Settings, Results, Schedule, etc.)
-    // Restrict write operations to authenticated users only
-    match /artfest_v2/{docId} {
+    
+    // Helper function to check if user is the owner of the festival
+    function isOwner(festId) {
+      return request.auth != null && get(/databases/$(database)/documents/festivals/$(festId)).data.ownerId == request.auth.uid;
+    }
+    
+    // Helper function to check if user is registered in the festival's users list
+    // Supports both UID as doc ID and UID field inside the document
+    function isRegistered(festId) {
+      return request.auth != null && exists(/databases/$(database)/documents/festivals/$(festId)/users/$(request.auth.uid));
+    }
+
+    match /festivals/{festId} {
+      // Anyone can read festival metadata (needed for slug resolution)
       allow read: if true;
-      allow write: if request.auth != null;
+      
+      // Only logged in users can create festivals
+      allow create: if request.auth != null;
+      
+      // Only owner can update or delete the festival metadata
+      allow update, delete: if request.auth != null && resource.data.ownerId == request.auth.uid;
+
+      // Subcollections
+      match /{allSubcollections=**} {
+        // Read access: Owner or Registered users
+        allow read: if request.auth != null;
+        
+        // Write access: Owner or Registered users
+        allow write: if isOwner(festId) || isRegistered(festId);
+      }
     }
   }
 }

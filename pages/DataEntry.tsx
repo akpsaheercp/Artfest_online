@@ -3,7 +3,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Card from '../components/Card';
 import { useFirebase } from '../hooks/useFirebase';
-import { Item, ItemType, Participant, Team, User, AppState, Category } from '../types';
+import { Item, ItemType, Participant, Team, User, AppState, Category, UserRole } from '../types';
 
 // --- Visual Helpers ---
 
@@ -33,7 +33,8 @@ const EntitySelectorModal: React.FC<{
     onClose: () => void;
     onSelect: (entity: any) => void;
     type: 'ITEM' | 'PARTICIPANT';
-}> = ({ isOpen, onClose, onSelect, type }) => {
+    currentUser: User | null;
+}> = ({ isOpen, onClose, onSelect, type, currentUser }) => {
     const { state } = useFirebase();
     const [search, setSearch] = useState('');
 
@@ -41,14 +42,18 @@ const EntitySelectorModal: React.FC<{
 
     const list = type === 'ITEM' 
         ? state.items.filter(i => i.name.toLowerCase().includes(search.toLowerCase()))
-        : state.participants.filter(p => p.name.toLowerCase().includes(search.toLowerCase()) || p.chestNumber.toLowerCase().includes(search.toLowerCase()));
+        : state.participants.filter(p => {
+            const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) || p.chestNumber.toLowerCase().includes(search.toLowerCase());
+            const matchesTeam = currentUser?.role === UserRole.TEAM_LEADER ? p.teamId === currentUser.teamId : true;
+            return matchesSearch && matchesTeam;
+        });
 
     return ReactDOM.createPortal(
         <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200" onClick={onClose}>
             <div className="bg-white dark:bg-[#121412] w-full max-w-lg rounded-[2.5rem] shadow-2xl border border-zinc-200 dark:border-white/10 flex flex-col max-h-[70vh] overflow-hidden" onClick={e => e.stopPropagation()}>
                 <div className="p-6 border-b border-zinc-100 dark:border-white/5 flex justify-between items-center bg-zinc-50/50 dark:bg-white/[0.01]">
                     <div>
-                        <h3 className="text-xl font-black font-serif uppercase tracking-tighter text-amazio-primary dark:text-white">Select {type === 'ITEM' ? 'Event' : 'Delegate'}</h3>
+                        <h3 className="text-xl font-black font-serif uppercase tracking-tighter text-brand-primary dark:text-white">Select {type === 'ITEM' ? 'Event' : 'Delegate'}</h3>
                         <p className="text-[10px] font-black uppercase text-zinc-400 mt-1 tracking-widest">Choose to manage enrollment</p>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-xl transition-colors text-zinc-400"><X size={24}/></button>
@@ -73,7 +78,7 @@ const EntitySelectorModal: React.FC<{
                                 className="w-full flex items-center justify-between p-4 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl hover:border-indigo-500/30 transition-all text-left group"
                             >
                                 <div className="min-w-0 pr-4">
-                                    <h5 className="text-sm font-black uppercase tracking-tight text-amazio-primary dark:text-zinc-100 truncate group-hover:text-indigo-600 transition-colors">{entity.name}</h5>
+                                    <h5 className="text-sm font-black uppercase tracking-tight text-brand-primary dark:text-zinc-100 truncate group-hover:text-indigo-600 transition-colors">{entity.name}</h5>
                                     <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-1">
                                         {type === 'ITEM' 
                                             ? state.categories.find(c => c.id === entity.categoryId)?.name 
@@ -98,7 +103,8 @@ const ItemManagementModal: React.FC<{
     isOpen: boolean; 
     onClose: () => void; 
     item: Item;
-}> = ({ isOpen, onClose, item }) => {
+    currentUser: User | null;
+}> = ({ isOpen, onClose, item, currentUser }) => {
     const { state, updateMultipleParticipants } = useFirebase();
     const [search, setSearch] = useState('');
     const [draftParticipants, setDraftParticipants] = useState<Participant[]>([]);
@@ -115,7 +121,11 @@ const ItemManagementModal: React.FC<{
         const isGeneralItem = state.categories.find(c => c.id === item.categoryId)?.isGeneralCategory;
         const list = draftParticipants
             .filter(p => (isGeneralItem || p.categoryId === item.categoryId) && !p.itemIds.includes(item.id))
-            .filter(p => p.name.toLowerCase().includes(search.toLowerCase()) || p.chestNumber.toLowerCase().includes(search.toLowerCase()));
+            .filter(p => {
+                const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) || p.chestNumber.toLowerCase().includes(search.toLowerCase());
+                const matchesTeam = currentUser?.role === UserRole.TEAM_LEADER ? p.teamId === currentUser.teamId : true;
+                return matchesSearch && matchesTeam;
+            });
         
         const groups: Record<string, Participant[]> = {};
         list.forEach(p => {
@@ -124,7 +134,7 @@ const ItemManagementModal: React.FC<{
             groups[catName].push(p);
         });
         return groups;
-    }, [draftParticipants, item.id, item.categoryId, state, search]);
+    }, [draftParticipants, item.id, item.categoryId, state, search, currentUser]);
 
     if (!isOpen || !state) return null;
 
@@ -239,7 +249,7 @@ const ItemManagementModal: React.FC<{
                             <Zap size={24} fill="currentColor" />
                         </div>
                         <div>
-                            <h3 className="text-2xl font-black font-serif uppercase tracking-tighter leading-none text-amazio-primary dark:text-white">{item.name}</h3>
+                            <h3 className="text-2xl font-black font-serif uppercase tracking-tighter leading-none text-brand-primary dark:text-white">{item.name}</h3>
                             <div className="flex items-center gap-2 mt-2">
                                 <p className="text-[10px] font-black uppercase text-zinc-400 tracking-widest">{category?.name} • {item.type} • {item.performanceType}</p>
                                 <span className="w-1 h-1 rounded-full bg-zinc-300"></span>
@@ -258,7 +268,7 @@ const ItemManagementModal: React.FC<{
                                 <UsersIcon size={14}/> Unit Status
                             </h4>
                             <div className="space-y-4">
-                                {state.teams.map(team => {
+                                {state.teams.filter(t => currentUser?.role === UserRole.TEAM_LEADER ? t.id === currentUser.teamId : true).map(team => {
                                     const teamParticipants = draftParticipants.filter(p => p.teamId === team.id && p.itemIds.includes(item.id));
                                     
                                     return (
@@ -340,7 +350,7 @@ const ItemManagementModal: React.FC<{
                                     placeholder="Search by name or ID..." 
                                     value={search} 
                                     onChange={e => setSearch(e.target.value)} 
-                                    className="w-full pl-11 pr-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                                    className="w-full pl-11 pr-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
                                 />
                             </div>
                             <div className="space-y-6 max-h-[500px] overflow-y-auto custom-scrollbar pr-2">
@@ -519,7 +529,7 @@ const ParticipantManagementModal: React.FC<{
                             {draftParticipant.name.charAt(0)}
                         </div>
                         <div>
-                            <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-amazio-primary dark:text-white">{draftParticipant.name}</h3>
+                            <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-brand-primary dark:text-white">{draftParticipant.name}</h3>
                             <div className="flex items-center gap-2 mt-2">
                                 <span className="text-[10px] font-black uppercase text-zinc-400 tracking-widest">{team?.name}</span>
                                 <span className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest border ${theme.border} ${theme.bg} ${theme.text}`}>{category?.name}</span>
@@ -598,7 +608,7 @@ const ParticipantManagementModal: React.FC<{
 // --- View Components ---
 
 const ItemEntryView: React.FC<{ onTriggerSelection: () => void }> = ({ onTriggerSelection }) => {
-    const { state, globalSearchTerm, globalFilters } = useFirebase();
+    const { state, currentUser, globalSearchTerm, globalFilters } = useFirebase();
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
     const filteredItems = useMemo(() => {
@@ -619,9 +629,15 @@ const ItemEntryView: React.FC<{ onTriggerSelection: () => void }> = ({ onTrigger
                 {filteredItems.map(item => {
                     const category = state.categories.find(c => c.id === item.categoryId);
                     const theme = getCategoryTheme(category?.name || '');
-                    const enrolledCount = state.participants.filter(p => p.itemIds.includes(item.id)).length;
+                    
+                    const enrolledCount = state.participants.filter(p => {
+                        const isEnrolled = p.itemIds.includes(item.id);
+                        const matchesTeam = currentUser?.role === UserRole.TEAM_LEADER ? p.teamId === currentUser.teamId : true;
+                        return isEnrolled && matchesTeam;
+                    }).length;
+
                     const maxPossiblePerTeam = item.type === ItemType.GROUP ? ((item.maxGroupsPerTeam || 1) * item.maxParticipants) : item.maxParticipants;
-                    const maxPossible = state.teams.length * maxPossiblePerTeam;
+                    const maxPossible = currentUser?.role === UserRole.TEAM_LEADER ? maxPossiblePerTeam : (state.teams.length * maxPossiblePerTeam);
 
                     return (
                         <div key={item.id} className="relative p-5 rounded-[2rem] border-2 border-zinc-100 dark:border-white/5 bg-white dark:bg-[#151816] transition-all hover:border-indigo-500/20 group cursor-default text-zinc-900 dark:text-zinc-100">
@@ -630,9 +646,14 @@ const ItemEntryView: React.FC<{ onTriggerSelection: () => void }> = ({ onTrigger
                                     <div className={`px-2.5 py-0.5 rounded-lg text-[8px] font-black uppercase tracking-widest border ${theme.border} ${theme.bg} ${theme.text}`}>{category?.name}</div>
                                     {category?.isGeneralCategory && <span className="bg-amber-500 text-white text-[7px] font-black uppercase px-1.5 py-0.5 rounded shadow-sm">General</span>}
                                 </div>
-                                <button onClick={() => setSelectedItem(item)} className="p-2 rounded-xl transition-all opacity-0 group-hover:opacity-100 focus-within:opacity-100 bg-zinc-50 dark:bg-white/5 text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:scale-110"><ListPlus size={18} /></button>
+                                <div className="flex items-center gap-2">
+                                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${enrolledCount >= maxPossible ? 'bg-rose-500/10 text-rose-500' : 'bg-emerald-500/10 text-emerald-500'}`}>
+                                        {enrolledCount} / {maxPossible}
+                                    </span>
+                                    <button onClick={() => setSelectedItem(item)} className="p-2 rounded-xl transition-all opacity-0 group-hover:opacity-100 focus-within:opacity-100 bg-zinc-50 dark:bg-white/5 text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:scale-110"><ListPlus size={18} /></button>
+                                </div>
                             </div>
-                            <h4 className="font-black text-amazio-primary dark:text-white text-lg uppercase tracking-tight leading-tight mb-2 line-clamp-1">{item.name}</h4>
+                            <h4 className="font-black text-brand-primary dark:text-white text-lg uppercase tracking-tight leading-tight mb-2 line-clamp-1">{item.name}</h4>
                             <div className="flex items-center gap-2 mb-4">
                                 <span className="text-[9px] font-black uppercase text-zinc-400">{item.type}</span>
                                 <span className="w-1 h-1 rounded-full bg-zinc-200"></span>
@@ -648,13 +669,13 @@ const ItemEntryView: React.FC<{ onTriggerSelection: () => void }> = ({ onTrigger
                     );
                 })}
             </div>
-            {selectedItem && <ItemManagementModal isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} item={selectedItem} />}
+            {selectedItem && <ItemManagementModal isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} item={selectedItem} currentUser={currentUser} />}
         </Card>
     );
 };
 
 const ParticipantEntryView: React.FC<{ onTriggerSelection: () => void }> = ({ onTriggerSelection }) => {
-    const { state, globalSearchTerm, globalFilters } = useFirebase();
+    const { state, currentUser, globalSearchTerm, globalFilters } = useFirebase();
     const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
 
     const filteredParticipants = useMemo(() => {
@@ -662,11 +683,14 @@ const ParticipantEntryView: React.FC<{ onTriggerSelection: () => void }> = ({ on
         return state.participants.filter(p => {
             const matchesSearch = p.name.toLowerCase().includes(globalSearchTerm.toLowerCase()) || 
                                  p.chestNumber.toLowerCase().includes(globalSearchTerm.toLowerCase());
-            const matchesTeam = globalFilters.teamId.length > 0 ? globalFilters.teamId.includes(p.teamId) : true;
+            const matchesTeamFilter = globalFilters.teamId.length > 0 ? globalFilters.teamId.includes(p.teamId) : true;
             const matchesCategory = globalFilters.categoryId.length > 0 ? globalFilters.categoryId.includes(p.categoryId) : true;
-            return matchesSearch && matchesTeam && matchesCategory;
+            
+            const matchesRoleTeam = currentUser?.role === UserRole.TEAM_LEADER ? p.teamId === currentUser.teamId : true;
+
+            return matchesSearch && matchesTeamFilter && matchesCategory && matchesRoleTeam;
         }).sort((a,b) => a.chestNumber.localeCompare(b.chestNumber, undefined, {numeric: true}));
-    }, [state, globalSearchTerm, globalFilters]);
+    }, [state, globalSearchTerm, globalFilters, currentUser]);
 
     if (!state) return null;
 
@@ -690,7 +714,7 @@ const ParticipantEntryView: React.FC<{ onTriggerSelection: () => void }> = ({ on
                                 </div>
                                 <button onClick={() => setSelectedParticipant(p)} className="p-2 rounded-xl transition-all opacity-0 group-hover:opacity-100 focus-within:opacity-100 bg-zinc-50 dark:bg-white/5 text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:scale-110"><Edit3 size={18} /></button>
                             </div>
-                            <h4 className="font-black text-amazio-primary dark:text-white text-lg uppercase tracking-tight leading-tight mb-2 truncate">{p.name}</h4>
+                            <h4 className="font-black text-brand-primary dark:text-white text-lg uppercase tracking-tight leading-tight mb-2 truncate">{p.name}</h4>
                             <div className={`inline-block px-2.5 py-0.5 rounded-lg text-[8px] font-black uppercase tracking-widest border ${theme.border} ${theme.bg} ${theme.text}`}>{category?.name}</div>
                             <div className="pt-4 mt-4 border-t border-zinc-50 dark:border-white/5 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
@@ -740,13 +764,13 @@ const DataEntryPage: React.FC<{ currentUser: User | null }> = ({ currentUser }) 
         <div className="space-y-6 sm:space-y-10 pb-24 animate-in fade-in duration-700 relative">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
                 <div>
-                    <h2 className="text-3xl sm:text-5xl font-black font-serif text-amazio-primary dark:text-white tracking-tighter uppercase leading-none">Data Entry</h2>
+                    <h2 className="text-3xl sm:text-5xl font-black font-serif text-brand-primary dark:text-white tracking-tighter uppercase leading-none">Data Entry</h2>
                     <p className="text-xs sm:text-lg text-zinc-500 dark:text-zinc-400 mt-2 sm:mt-3 font-medium italic">Strategic enrollment and identity management.</p>
                 </div>
                 <div className="flex items-center gap-3 pb-1">
                     <div className="px-4 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-sm">
                         <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Registry:</span>
-                        <span className="ml-2 text-sm font-black text-amazio-primary dark:text-white tabular-nums">
+                        <span className="ml-2 text-sm font-black text-brand-primary dark:text-white tabular-nums">
                             {view === 'ITEMS' ? filteredItemsCount : filteredParticipantsCount}
                         </span>
                         <span className="ml-1 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Records</span>
@@ -770,13 +794,14 @@ const DataEntryPage: React.FC<{ currentUser: User | null }> = ({ currentUser }) 
                 isOpen={isSelectorOpen} 
                 onClose={() => setIsSelectorOpen(false)} 
                 type={view === 'ITEMS' ? 'ITEM' : 'PARTICIPANT'}
+                currentUser={currentUser}
                 onSelect={(entity) => {
                     if (view === 'ITEMS') setSelectedItem(entity);
                     else setSelectedParticipant(entity);
                 }}
             />
 
-            {selectedItem && <ItemManagementModal isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} item={selectedItem} />}
+            {selectedItem && <ItemManagementModal isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} item={selectedItem} currentUser={currentUser} />}
             {selectedParticipant && <ParticipantManagementModal isOpen={!!selectedParticipant} onClose={() => setSelectedParticipant(null)} participant={selectedParticipant} />}
         </div>
     );

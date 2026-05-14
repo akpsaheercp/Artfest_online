@@ -193,7 +193,7 @@ const UniversalFilter: React.FC<UniversalFilterProps> = ({ pageTitle }) => {
     const stageOptions = (state.settings.stages || []).map(s => ({ id: s, name: s }));
 
     const DesktopFilterContent = () => (
-        <div className="flex flex-row gap-2.5 items-center bg-white/30 dark:bg-black/20 p-1.5 rounded-2xl border border-amazio-primary/5 dark:border-white/5 backdrop-blur-md">
+        <div className="flex flex-row gap-2.5 items-center bg-white/30 dark:bg-black/20 p-1.5 rounded-2xl border border-brand-primary/5 dark:border-white/5 backdrop-blur-md">
             {isScoringPage && (
                 <MultiSelect 
                     label="Status" 
@@ -299,12 +299,12 @@ const UniversalFilter: React.FC<UniversalFilterProps> = ({ pageTitle }) => {
                     className={`relative p-2.5 rounded-xl flex items-center gap-2 transition-all border ${
                         activeCount > 0 
                         ? 'bg-indigo-600 text-white border-indigo-700 shadow-lg shadow-indigo-500/20' 
-                        : 'bg-white/40 dark:bg-white/5 text-zinc-500 dark:text-zinc-400 border-amazio-primary/10 dark:border-white/10'
+                        : 'bg-white/40 dark:bg-white/5 text-zinc-500 dark:text-zinc-400 border-brand-primary/10 dark:border-white/10'
                     }`}
                 >
                     <Filter size={18} />
                     {activeCount > 0 && (
-                        <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-black text-white shadow-lg border-2 border-white dark:border-amazio-bg">
+                        <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-black text-white shadow-lg border-2 border-white dark:border-brand-bg">
                             {activeCount}
                         </span>
                     )}
@@ -317,7 +317,7 @@ const UniversalFilter: React.FC<UniversalFilterProps> = ({ pageTitle }) => {
                     <div className="relative w-full bg-white dark:bg-[#0F1210] rounded-t-[2.5rem] shadow-2xl p-6 pt-8 animate-in slide-in-from-bottom duration-300 border-t border-white/10 max-h-[85vh] overflow-y-auto custom-scrollbar">
                         <div className="absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-zinc-200 dark:bg-zinc-800 rounded-full" />
                         <div className="flex items-center justify-between mb-8">
-                            <h3 className="text-xl font-black font-serif text-amazio-primary dark:text-white uppercase tracking-tighter">Filter Criteria</h3>
+                            <h3 className="text-xl font-black font-serif text-brand-primary dark:text-white uppercase tracking-tighter">Filter Criteria</h3>
                             <button onClick={handleReset} className="text-[10px] font-black uppercase tracking-widest text-red-500 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 dark:bg-red-900/10"><ListRestart size={12}/> Reset</button>
                         </div>
                         
@@ -407,7 +407,7 @@ const UniversalFilter: React.FC<UniversalFilterProps> = ({ pageTitle }) => {
 
                             {!isScoringPage && !isSchedulePage && !isCodesPage && (
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Team Scopes</label>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Team Categories</label>
                                     <div className="grid grid-cols-2 gap-2">
                                         {teamOptions.map(t => (
                                             <button 
@@ -509,7 +509,7 @@ const UniversalFilter: React.FC<UniversalFilterProps> = ({ pageTitle }) => {
                         <div className="mt-10 pb-6">
                             <button 
                                 onClick={() => setIsMobileOpen(false)}
-                                className="w-full py-4 bg-amazio-primary text-white rounded-2xl text-xs font-black uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all"
+                                className="w-full py-4 bg-brand-primary text-white rounded-2xl text-xs font-black uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all"
                             >
                                 Apply Modifications
                             </button>

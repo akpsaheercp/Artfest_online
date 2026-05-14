@@ -1,12 +1,12 @@
 
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import Card from '../../components/Card';
-import { useFirebase } from '../../hooks/useFirebase';
+import Card from '../components/Card';
+import { useFirebase } from '../hooks/useFirebase';
 import { X, Users, Trash2, BookText, Database, Info, FileDown, Upload, ArrowRight, Building2, Briefcase, Image as ImageIcon, Check, LayoutTemplate, RotateCcw, ShieldAlert, Award, Edit2, Save, Type, CheckCircle, Plus, FileText, MoreHorizontal } from 'lucide-react';
-import { User, UserRole, AppState, FontConfig, GeneralFontConfig } from '../../types';
-import { TABS } from '../../constants';
-import { CollapsibleCard } from '../../components/CollapsibleCard'; // Import CollapsibleCard
+import { User, UserRole, AppState, FontConfig, GeneralFontConfig } from '../types';
+import { TABS } from '../constants';
+import { CollapsibleCard } from '../components/CollapsibleCard'; // Import CollapsibleCard
 
 // --- Helper Component: Image Upload ---
 interface ImageUploadProps {

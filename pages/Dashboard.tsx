@@ -1,5 +1,5 @@
 
-import { Activity, ArrowRight, Award, Calendar, ClipboardList, Clock, Crown, ExternalLink, Flag, Monitor, Sparkles, TrendingUp, Trophy, Users, CheckCircle2, Circle, ListFilter, BookOpen, MapPin } from 'lucide-react';
+import { Activity, ArrowRight, Award, Calendar, ClipboardList, Clock, Crown, ExternalLink, Flag, Monitor, Sparkles, TrendingUp, Trophy, Users, CheckCircle2, Circle, ListFilter, BookOpen, MapPin, Rocket } from 'lucide-react';
 import React, { useMemo } from 'react';
 import Card from '../components/Card';
 import { TABS } from '../constants';
@@ -36,7 +36,7 @@ const StatCard: React.FC<{ icon: React.ElementType, title: string, value: string
 );
 
 const DashboardPage: React.FC<DashboardPageProps> = ({ setActiveTab, theme }) => {
-  const { state, currentUser } = useFirebase();
+  const { state, currentUser, setIsOnboardingOpen } = useFirebase();
 
   const logoUrl = useMemo(() => {
     if (!state?.settings.branding) return null;
@@ -102,13 +102,14 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ setActiveTab, theme }) =>
                       {logoUrl ? (
                           <img src={logoUrl} alt={state.settings.heading} className="h-auto max-h-20 sm:max-h-36 w-auto object-contain filter drop-shadow-xl" />
                       ) : (
-                          <h1 className="text-4xl sm:text-7xl font-black font-serif tracking-tighter leading-tight text-zinc-900 dark:text-zinc-100 uppercase">{state?.settings.heading || 'AMAZIO 2026'}</h1>
+                          <h1 className="text-4xl sm:text-7xl font-black font-serif tracking-tighter leading-tight text-zinc-900 dark:text-zinc-100 uppercase">{state?.settings.heading || `FEST ${new Date().getFullYear()}`}</h1>
                       )}
                   </div>
-                  <p className="text-base sm:text-xl text-zinc-600 dark:text-zinc-400 font-medium italic tracking-wide max-w-xl">"{state?.settings.description || "The official management terminal."}"</p>
+                  <p className="text-base sm:text-xl text-zinc-600 dark:text-zinc-400 font-medium italic tracking-wide max-w-xl">"{state?.settings.branding?.motto || state?.settings.description || "The official management terminal."}"</p>
                   <div className="mt-4 sm:mt-8 flex flex-wrap gap-3 sm:gap-4">
                      <button onClick={() => setActiveTab(TABS.SCHEDULE)} className="flex items-center gap-2.5 px-6 py-3.5 sm:px-10 sm:py-5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-black rounded-xl sm:rounded-2xl shadow-xl hover:scale-[1.03] transition-all text-[10px] sm:text-xs uppercase tracking-widest">Global Timeline <ArrowRight size={14}/></button>
                      <button onClick={() => setActiveTab(TABS.PROJECTOR)} className="flex items-center gap-2.5 px-6 py-3.5 sm:px-10 sm:py-5 bg-emerald-600 text-white font-black rounded-xl sm:rounded-2xl shadow-xl hover:scale-[1.03] transition-all text-[10px] sm:text-xs uppercase tracking-widest">Projector Mode <Monitor size={14}/></button>
+                     <button onClick={() => setIsOnboardingOpen(true)} className="flex items-center gap-2.5 px-6 py-3.5 sm:px-10 sm:py-5 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white font-black rounded-xl sm:rounded-2xl shadow-lg hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all text-[10px] sm:text-xs uppercase tracking-widest">Take a Tour <Rocket size={14} className="text-emerald-500"/></button>
                   </div>
               </div>
               <div className="lg:col-span-5 flex justify-center lg:justify-end">
@@ -186,7 +187,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ setActiveTab, theme }) =>
           </div>
       </div>
       <div className="text-center pt-8 sm:pt-12">
-          <p className="text-[9px] sm:text-[10px] font-black text-zinc-400 dark:text-zinc-600 uppercase tracking-[0.4em]">© 2026 AMAZIO • ART FEST TERMINAL v6.5</p>
+          <p className="text-[9px] sm:text-[10px] font-black text-zinc-400 dark:text-zinc-600 uppercase tracking-[0.4em]">© {new Date().getFullYear()} {state?.settings.branding?.shortName || 'FEST'} • {state?.settings.branding?.themeSubtitle || 'ART FEST TERMINAL'} {state?.settings.branding?.version || 'v6.5'}</p>
       </div>
     </div>
   );

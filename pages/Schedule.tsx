@@ -45,7 +45,7 @@ const SectionTitle = ({ title, icon: Icon, accentColor = "indigo" }: { title: st
     return (
         <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
             <div className={`h-4 sm:h-5 w-1.5 rounded-full ${barColors[accentColor]}`}></div>
-            <h3 className="text-base sm:text-xl font-black font-serif text-amazio-primary dark:text-white uppercase tracking-tighter">
+            <h3 className="text-base sm:text-xl font-black font-serif text-brand-primary dark:text-white uppercase tracking-tighter">
                 {title}
             </h3>
             {Icon && <Icon className="text-zinc-400 ml-1" size={16} />}
@@ -258,12 +258,12 @@ const SchedulePage: React.FC = () => {
         <div className="space-y-6 sm:space-y-10 animate-in fade-in duration-500 pb-24">
             <div className="hidden md:flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                 <div>
-                    <h2 className="text-5xl font-black font-serif text-amazio-primary dark:text-white tracking-tighter uppercase leading-none">Event Schedule</h2>
+                    <h2 className="text-5xl font-black font-serif text-brand-primary dark:text-white tracking-tighter uppercase leading-none">Event Schedule</h2>
                     <p className="text-zinc-500 dark:text-zinc-400 mt-3 font-medium text-lg italic">Timeline management and stage logistics.</p>
                 </div>
             </div>
 
-            <div className="bg-white/60 dark:bg-zinc-900/60 rounded-[1.5rem] sm:rounded-[2.5rem] border border-amazio-primary/5 dark:border-white/5 p-4 sm:p-8 shadow-glass-light dark:shadow-2xl">
+            <div className="bg-white/60 dark:bg-zinc-900/60 rounded-[1.5rem] sm:rounded-[2.5rem] border border-brand-primary/5 dark:border-white/5 p-4 sm:p-8 shadow-glass-light dark:shadow-2xl">
                 <SectionTitle title="1. Manual Entry" icon={Layers} accentColor="emerald" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 items-end">
                     <div className="lg:col-span-1">
@@ -403,7 +403,7 @@ const SchedulePage: React.FC = () => {
                                                 </div>
                                             </div>
                                             <div className="mb-3 sm:mb-4">
-                                                <h4 className="text-sm sm:text-lg font-black text-amazio-primary dark:text-white uppercase tracking-tight leading-tight mb-1 sm:mb-2 line-clamp-1">{item?.name}</h4>
+                                                <h4 className="text-sm sm:text-lg font-black text-brand-primary dark:text-white uppercase tracking-tight leading-tight mb-1 sm:mb-2 line-clamp-1">{item?.name}</h4>
                                                 <div className={`inline-block px-2 py-0.5 rounded-md text-[7px] sm:text-[9px] font-black uppercase tracking-widest border ${catColor}`}>{category?.name}</div>
                                             </div>
                                         </div>
@@ -431,7 +431,7 @@ const SchedulePage: React.FC = () => {
                     <button 
                         onClick={generateScheduleWithAI} 
                         disabled={isLoading} 
-                        className={`w-full lg:w-auto px-6 py-4 sm:px-10 sm:py-5 rounded-xl sm:rounded-[1.5rem] font-black uppercase tracking-widest sm:tracking-[0.2em] text-[10px] sm:text-sm shadow-xl transition-all flex items-center justify-center gap-2 sm:gap-3 ${isLoading ? 'bg-zinc-200 text-zinc-400' : 'bg-amazio-primary text-white shadow-amazio-primary/30'}`}
+                        className={`w-full lg:w-auto px-6 py-4 sm:px-10 sm:py-5 rounded-xl sm:rounded-[1.5rem] font-black uppercase tracking-widest sm:tracking-[0.2em] text-[10px] sm:text-sm shadow-xl transition-all flex items-center justify-center gap-2 sm:gap-3 ${isLoading ? 'bg-zinc-200 text-zinc-400' : 'bg-brand-primary text-white shadow-brand-primary/30'}`}
                     >
                         {isLoading ? <RefreshCw className="animate-spin" size={16} /> : <Sparkles size={16} sm:size={20} />}
                         {isLoading ? 'Computing...' : 'Auto Timeline'}
@@ -440,7 +440,7 @@ const SchedulePage: React.FC = () => {
                 {error && <div className="mt-4 p-3 rounded-xl bg-rose-50 text-rose-600 text-[10px] font-bold flex items-center gap-2 animate-in slide-in-from-top-2"><AlertTriangle size={14}/> {error}</div>}
             </div>
 
-            <div className="bg-white/60 dark:bg-zinc-900/60 rounded-[1.5rem] sm:rounded-[2.5rem] border border-amazio-primary/5 dark:border-white/5 p-4 sm:p-8 shadow-glass-light dark:shadow-2xl">
+            <div className="bg-white/60 dark:bg-zinc-900/60 rounded-[1.5rem] sm:rounded-[2.5rem] border border-brand-primary/5 dark:border-white/5 p-4 sm:p-8 shadow-glass-light dark:shadow-2xl">
                 <SectionTitle title="3. Configuration" icon={Settings2} />
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10 items-start">
                     <ChipInput label="Competition Days" description="Define the festival dates." values={state.settings.eventDays || []} onChange={(d) => updateSettings({ eventDays: d })} icon={CalendarIcon} colorScheme="indigo" />
@@ -455,7 +455,7 @@ const SchedulePage: React.FC = () => {
                                 <Layout size={24} />
                             </div>
                             <div>
-                                <h4 className="text-sm sm:text-base font-black uppercase tracking-tight text-amazio-primary dark:text-white">Primary Display Identity</h4>
+                                <h4 className="text-sm sm:text-base font-black uppercase tracking-tight text-brand-primary dark:text-white">Primary Display Identity</h4>
                                 <p className="text-[10px] sm:text-xs font-medium text-zinc-500 dark:text-zinc-400">Rearrange the visual order of Time and Date on schedule cards.</p>
                             </div>
                         </div>

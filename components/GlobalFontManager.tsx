@@ -15,6 +15,11 @@ export const getGlobalFontCSS = (state: AppState | null | undefined) => {
     if (state.customFonts?.malayalam?.url) {
         fontFaces += `
             @font-face {
+                font-family: 'MalayalamGlobal';
+                src: url('${state.customFonts.malayalam.url}');
+                font-display: swap;
+            }
+            @font-face {
                 font-family: 'GlobalAutoFont';
                 src: url('${state.customFonts.malayalam.url}');
                 unicode-range: ${MALAYALAM_RANGE};
@@ -25,6 +30,11 @@ export const getGlobalFontCSS = (state: AppState | null | undefined) => {
 
     if (state.customFonts?.arabic?.url) {
         fontFaces += `
+            @font-face {
+                font-family: 'ArabicGlobal';
+                src: url('${state.customFonts.arabic.url}');
+                font-display: swap;
+            }
             @font-face {
                 font-family: 'GlobalAutoFont';
                 src: url('${state.customFonts.arabic.url}');

@@ -1,0 +1,44 @@
+{
+  "short_name": "Fest Manager",
+  "name": "Knowledge Fest Manager",
+  "description": "Official management terminal for Knowledge Fest.",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#283E25",
+  "background_color": "#FAF9F6",
+  "shortcuts": [
+    {
+      "name": "Data Entry",
+      "short_name": "Data Entry",
+      "description": "Enter new participant data",
+      "url": "/#Data Entry"
+    },
+    {
+      "name": "Scoring & Results",
+      "short_name": "Scoring",
+      "description": "Enter scores and declare results",
+      "url": "/#Scoring & Results"
+    },
+    {
+      "name": "Schedule",
+      "short_name": "Schedule",
+      "description": "View the event schedule",
+      "url": "/#Schedule"
+    }
+  ]
+}

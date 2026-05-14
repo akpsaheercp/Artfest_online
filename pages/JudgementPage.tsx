@@ -107,7 +107,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ item, result, status, categoryN
                     <p className={`text-[7px] sm:text-[8px] font-black uppercase tracking-widest mb-0.5`} style={{ color: catColor }}>
                         {categoryName}
                     </p>
-                    <h3 className="text-sm sm:text-base font-black font-serif uppercase tracking-tight leading-tight text-amazio-primary dark:text-zinc-100 line-clamp-2">
+                    <h3 className="text-sm sm:text-base font-black font-serif uppercase tracking-tight leading-tight text-brand-primary dark:text-zinc-100 line-clamp-2">
                         {item.name}
                     </h3>
                 </div>
@@ -132,7 +132,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ item, result, status, categoryN
                 <div className="flex gap-1.5">
                     <button 
                         onClick={onEdit}
-                        className="flex-grow py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-black uppercase tracking-widest text-[8px] sm:text-[9px] shadow-sm transition-all active:scale-95 flex items-center justify-center gap-1 bg-amazio-primary text-white"
+                        className="flex-grow py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-black uppercase tracking-widest text-[8px] sm:text-[9px] shadow-sm transition-all active:scale-95 flex items-center justify-center gap-1 bg-brand-primary text-white"
                     >
                         {isDeclared ? <Eye size={12}/> : <Edit3 size={12}/>}
                         {isDeclared ? 'View' : 'Score'}
@@ -209,7 +209,7 @@ const ScoringTable: React.FC<{
                                 <td className="px-6 py-4 min-w-[200px]">
                                     {!isJudge ? (
                                         <>
-                                            <div className="font-black text-sm uppercase text-amazio-primary dark:text-zinc-100 truncate">{sp.participantName}</div>
+                                            <div className="font-black text-sm uppercase text-brand-primary dark:text-zinc-100 truncate">{sp.participantName}</div>
                                             <div className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest truncate">{sp.teamName}</div>
                                         </>
                                     ) : (
@@ -489,7 +489,7 @@ const JudgementPage: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                         <button onClick={() => setSelectedItemId(null)} className="flex items-center gap-2 text-zinc-400 hover:text-indigo-600 font-bold text-[10px] sm:text-xs uppercase tracking-widest mb-2 sm:mb-4">
                             <ArrowLeft size={14} /> Back
                         </button>
-                        <h2 className="text-xl sm:text-3xl font-black font-serif text-amazio-primary dark:text-white uppercase tracking-tighter">{selectedItem.name}</h2>
+                        <h2 className="text-xl sm:text-3xl font-black font-serif text-brand-primary dark:text-white uppercase tracking-tighter">{selectedItem.name}</h2>
                         <div className="flex items-center gap-2 mt-1">
                             <span className="px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-[8px] sm:text-[10px] font-black text-zinc-500 uppercase tracking-widest border border-zinc-200 dark:border-zinc-700">{category?.name}</span>
                             <span className="px-2 py-0.5 rounded-md text-[8px] sm:text-[10px] font-black uppercase tracking-widest border" style={{ backgroundColor: getPerformanceColor(selectedItem.performanceType) + '15', color: getPerformanceColor(selectedItem.performanceType), borderColor: getPerformanceColor(selectedItem.performanceType) + '40' }}>{selectedItem.performanceType}</span>
@@ -498,11 +498,11 @@ const JudgementPage: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                     
                     <div className="flex gap-2 w-full sm:w-auto">
                          {isDeclared ? (
-                            !isJudge && <button onClick={() => handleUnlock()} className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-amazio-primary dark:text-white rounded-lg text-[8px] sm:text-[10px] font-black uppercase tracking-widest shadow-sm hover:bg-zinc-50 transition-all"><LockOpen size={14}/> Unlock</button>
+                            !isJudge && <button onClick={() => handleUnlock()} className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-brand-primary dark:text-white rounded-lg text-[8px] sm:text-[10px] font-black uppercase tracking-widest shadow-sm hover:bg-zinc-50 transition-all"><LockOpen size={14}/> Unlock</button>
                          ) : (
                             <>
                                 {(isManager || isJudge) && (
-                                    <button onClick={() => handleSaveDraft()} disabled={scoredParticipants.length === 0 || isSaving} className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-widest shadow-sm transition-all disabled:opacity-50 ${isJudge ? 'bg-indigo-600 text-white shadow-indigo-500/20' : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-amazio-primary dark:text-white hover:bg-zinc-50'}`}>
+                                    <button onClick={() => handleSaveDraft()} disabled={scoredParticipants.length === 0 || isSaving} className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-widest shadow-sm transition-all disabled:opacity-50 ${isJudge ? 'bg-indigo-600 text-white shadow-indigo-500/20' : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-brand-primary dark:text-white hover:bg-zinc-50'}`}>
                                         <Save size={14}/> {isSaving ? '...' : (isJudge ? 'Submit' : 'Draft')}
                                     </button>
                                 )}
@@ -544,7 +544,7 @@ const JudgementPage: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                                         <div className="min-w-0 flex-1">
                                             {!isJudge ? (
                                                 <>
-                                                    <h4 className="font-black text-amazio-primary dark:text-white uppercase tracking-tight text-sm leading-tight truncate">{sp.participantName}</h4>
+                                                    <h4 className="font-black text-brand-primary dark:text-white uppercase tracking-tight text-sm leading-tight truncate">{sp.participantName}</h4>
                                                     <p className="text-[8px] font-bold text-zinc-500 uppercase tracking-wide truncate mt-0.5">{sp.teamName}</p>
                                                 </>
                                             ) : (
@@ -585,13 +585,13 @@ const JudgementPage: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         <div className="space-y-6 sm:space-y-10 animate-in fade-in duration-700 pb-24">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
                 <div>
-                    <h2 className="text-3xl sm:text-5xl font-black font-serif text-amazio-primary dark:text-white tracking-tighter uppercase leading-none">Scoring Terminal</h2>
+                    <h2 className="text-3xl sm:text-5xl font-black font-serif text-brand-primary dark:text-white tracking-tighter uppercase leading-none">Scoring Terminal</h2>
                     <p className="text-xs sm:text-lg text-zinc-500 dark:text-zinc-400 mt-2 sm:mt-3 font-medium italic">Manage competition verdicts and global standings.</p>
                 </div>
                 <div className="flex items-center gap-3 pb-1">
                     <div className="px-4 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-sm">
                         <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Registry:</span>
-                        <span className="ml-2 text-sm font-black text-amazio-primary dark:text-white tabular-nums">{filteredItems.length}</span>
+                        <span className="ml-2 text-sm font-black text-brand-primary dark:text-white tabular-nums">{filteredItems.length}</span>
                         <span className="ml-1 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Events</span>
                     </div>
                 </div>

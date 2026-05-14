@@ -44,6 +44,8 @@ interface PosterData {
     itemName: string;
     categoryName: string;
     resultNumber: string; 
+    eventName?: string;
+    organizingBody?: string;
     winners: {
         rank: number;
         name: string;
@@ -90,12 +92,28 @@ const PosterCanvas: React.FC<{
         >
             {/* Background Layer */}
             {customBg && (
-                <img src={customBg} className="absolute inset-0 w-full h-full object-cover z-0" alt="Official Background" />
+                <img 
+                    src={customBg} 
+                    className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000" 
+                    alt="Official Background" 
+                    onLoad={(e) => (e.currentTarget.style.opacity = '1')}
+                    style={{ opacity: 0 }}
+                />
             )}
 
             {/* Dynamic Content Overlay */}
             <div className="relative z-10 w-full h-full flex flex-col p-0">
                 
+                {/* Brand Header */}
+                <div className="absolute top-[60px] left-0 w-full flex flex-col items-center text-center px-[80px]">
+                    <h4 className="text-[18px] font-black uppercase tracking-[0.5em] text-[#606C38] mb-2" style={textStyle}>
+                        {data.organizingBody}
+                    </h4>
+                    <h1 className="text-[42px] font-black uppercase tracking-tighter text-[#283618]" style={textStyle}>
+                        {data.eventName}
+                    </h1>
+                </div>
+
                 {/* Header Zone: Category (Prefix/Suffix) & Item Name */}
                 <div className="mt-[232px] ml-[82px] space-y-0">
                     <div className="flex items-center gap-3">
@@ -141,7 +159,7 @@ const PosterCanvas: React.FC<{
 
 // --- Main Page Component ---
 const CreativeStudio: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
-    const { state, updateCustomBackgrounds } = useFirebase();
+    const { state, updateCustomBackgrounds, globalBackgroundLayers, refreshGlobalBackgrounds } = useFirebase();
     const [selectedItemId, setSelectedItemId] = useState<string>('');
     const [selectedBgUrl, setSelectedBgUrl] = useState<string | null>(null);
     const [selectedFont, setSelectedFont] = useState<string>('font-slab');
@@ -150,6 +168,13 @@ const CreativeStudio: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     const [hasInitialized, setHasInitialized] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
+    const [isRefreshingBgs, setIsRefreshingBgs] = useState(false);
+
+    const handleRefreshBgs = async () => {
+        setIsRefreshingBgs(true);
+        await refreshGlobalBackgrounds();
+        setIsRefreshingBgs(false);
+    };
 
     const mainContainerRef = useRef<HTMLDivElement>(null);
     const bgInputRef = useRef<HTMLInputElement>(null);
@@ -245,6 +270,8 @@ const CreativeStudio: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
             itemName: item?.name || '',
             categoryName: category?.name || '',
             resultNumber: String(listIndex + 1),
+            eventName: state.settings.branding?.eventName || state.settings.heading,
+            organizingBody: state.settings.organizingTeam,
             winners
         } as PosterData;
     }, [state, selectedItemId, declaredItems]);
@@ -333,7 +360,7 @@ const CreativeStudio: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
             });
             
             const link = document.createElement('a');
-            link.download = `amazio-poster-${selectedItemId}.jpg`;
+            link.download = `${state?.settings.branding?.shortName?.toLowerCase() || 'fest'}-poster-${selectedItemId}.jpg`;
             // Using image/jpeg with high quality
             link.href = captured.toDataURL('image/jpeg', 0.95);
             link.click();
@@ -353,11 +380,13 @@ const CreativeStudio: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         { label: 'System Sans', value: 'font-sans' },
         ...(state.customFonts?.englishPrimary?.family ? [{ label: `Primary: ${state.customFonts.englishPrimary.family}`, value: 'EnglishPrimary' }] : []),
         ...(state.customFonts?.englishSecondary?.family ? [{ label: `Secondary: ${state.customFonts.englishSecondary.family}`, value: 'EnglishSecondary' }] : []),
+        ...(state.customFonts?.malayalam?.family ? [{ label: `Malayalam: ${state.customFonts.malayalam.family}`, value: 'MalayalamGlobal' }] : []),
+        ...(state.customFonts?.arabic?.family ? [{ label: `Arabic: ${state.customFonts.arabic.family}`, value: 'ArabicGlobal' }] : []),
         ...(state.generalCustomFonts || []).map(f => ({ label: f.family, value: f.family })),
     ];
 
     return (
-        <div className="flex flex-col h-full bg-amazio-light-bg dark:bg-amazio-bg animate-in fade-in duration-500 overflow-hidden relative">
+        <div className="flex flex-col h-full bg-brand-light-bg dark:bg-brand-bg animate-in fade-in duration-500 overflow-hidden relative">
             
             {/* Header Toolbar */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-3 sm:p-5 bg-white dark:bg-zinc-900/50 border-b border-zinc-200 dark:border-zinc-800 z-30">
@@ -387,7 +416,7 @@ const CreativeStudio: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                     <button 
                         disabled={!selectedItemId || isDownloading}
                         onClick={handleDownload} 
-                        className="bg-amazio-primary text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-amazio-primary/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-30 flex items-center justify-center gap-2 shrink-0"
+                        className="bg-brand-primary text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-brand-primary/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-30 flex items-center justify-center gap-2 shrink-0"
                     >
                         {isDownloading ? <RefreshCw className="animate-spin" size={14}/> : <Download size={14} strokeWidth={3} />}
                         <span className="hidden sm:inline">Download JPG</span>
@@ -421,45 +450,92 @@ const CreativeStudio: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
 
                     <div className="flex-grow overflow-y-auto custom-scrollbar p-6 space-y-8">
                         {/* Background Selection */}
-                        <div>
-                            <div className="flex justify-between items-center mb-4">
-                                <div className="flex items-center gap-2">
-                                    <ImageIcon size={14} className="text-indigo-500" />
-                                    <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Background Layers</h3>
-                                </div>
-                                <button 
-                                    onClick={() => bgInputRef.current?.click()} 
-                                    disabled={isUploading}
-                                    className="p-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-lg hover:scale-110 transition-transform disabled:opacity-50"
-                                >
-                                    {isUploading ? <RefreshCw className="animate-spin" size={16}/> : <Plus size={16}/>}
-                                </button>
-                                <input type="file" ref={bgInputRef} className="hidden" accept="image/*" onChange={handleBgUpload} />
-                            </div>
-                            
-                            <div className="grid grid-cols-4 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                                <button 
-                                    onClick={() => setSelectedBgUrl(null)}
-                                    className={`aspect-square rounded-2xl border-2 flex items-center justify-center transition-all ${!selectedBgUrl ? 'border-indigo-500 bg-indigo-50 shadow-inner' : 'border-zinc-100 bg-zinc-50 dark:bg-white/5 dark:border-white/5'}`}
-                                >
-                                    <Layers size={18} className="text-zinc-400" />
-                                </button>
-                                {(state.customBackgrounds || []).map((bg, idx) => (
-                                    <div key={idx} className="relative aspect-square">
-                                        <img 
-                                            src={bg} 
-                                            onClick={() => setSelectedBgUrl(bg)}
-                                            className={`w-full h-full object-cover rounded-2xl cursor-pointer border-2 transition-all ${selectedBgUrl === bg ? 'border-indigo-500 scale-95 shadow-lg' : 'border-transparent'}`} 
-                                            alt={`BG ${idx + 1}`}
-                                        />
-                                        <button 
-                                            onClick={() => handleDeleteBg(idx)}
-                                            className="absolute -top-1 -right-1 bg-rose-500 text-white p-1 rounded-full shadow-lg hover:scale-110 transition-transform"
-                                        >
-                                            <X size={10} strokeWidth={4}/>
-                                        </button>
+                        <div className="space-y-6">
+                            <div>
+                                <div className="flex justify-between items-center mb-4">
+                                    <div className="flex items-center gap-2">
+                                        <Leaf size={14} className="text-emerald-500" />
+                                        <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Official Assets</h3>
                                     </div>
-                                ))}
+                                    <button 
+                                        onClick={handleRefreshBgs}
+                                        disabled={isRefreshingBgs}
+                                        className="p-1.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg hover:scale-110 transition-transform disabled:opacity-50"
+                                        title="Refresh Official Backgrounds"
+                                    >
+                                        <RefreshCw className={`${isRefreshingBgs ? 'animate-spin' : ''}`} size={14}/>
+                                    </button>
+                                </div>
+                                <div className="grid grid-cols-4 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                                    <button 
+                                        onClick={() => setSelectedBgUrl(null)}
+                                        className={`aspect-square rounded-2xl border-2 flex items-center justify-center transition-all ${!selectedBgUrl ? 'border-indigo-500 bg-indigo-50 shadow-inner' : 'border-zinc-100 bg-zinc-50 dark:bg-white/5 dark:border-white/5'}`}
+                                    >
+                                        <Layers size={18} className="text-zinc-400" />
+                                    </button>
+                                    {(globalBackgroundLayers || []).map((bg, idx) => (
+                                        <div key={`global-${idx}`} className="relative aspect-square bg-zinc-100 dark:bg-white/5 rounded-2xl overflow-hidden">
+                                            <img 
+                                                src={bg} 
+                                                loading="lazy"
+                                                onClick={() => setSelectedBgUrl(bg)}
+                                                className={`w-full h-full object-cover cursor-pointer border-2 transition-all duration-500 ${selectedBgUrl === bg ? 'border-indigo-500 scale-95 shadow-lg' : 'border-transparent hover:scale-105'}`} 
+                                                alt={`Global BG ${idx + 1}`}
+                                                onLoad={(e) => (e.currentTarget.style.opacity = '1')}
+                                                style={{ opacity: 0 }}
+                                            />
+                                        </div>
+                                    ))}
+                                    {(!globalBackgroundLayers || globalBackgroundLayers.length === 0) && !isRefreshingBgs && (
+                                        <div className="col-span-full py-4 text-center border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-2xl">
+                                            <p className="text-[8px] font-bold uppercase tracking-widest text-zinc-400">No assets found</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="pt-6 border-t border-zinc-100 dark:border-white/5">
+                                <div className="flex justify-between items-center mb-4">
+                                    <div className="flex items-center gap-2">
+                                        <ImageIcon size={14} className="text-indigo-500" />
+                                        <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Local Uploads</h3>
+                                    </div>
+                                    <button 
+                                        onClick={() => bgInputRef.current?.click()} 
+                                        disabled={isUploading}
+                                        className="p-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-lg hover:scale-110 transition-transform disabled:opacity-50"
+                                    >
+                                        {isUploading ? <RefreshCw className="animate-spin" size={16}/> : <Plus size={16}/>}
+                                    </button>
+                                    <input type="file" ref={bgInputRef} className="hidden" accept="image/*" onChange={handleBgUpload} />
+                                </div>
+                                
+                                <div className="grid grid-cols-4 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                                    {(state.customBackgrounds || []).map((bg, idx) => (
+                                        <div key={`custom-${idx}`} className="relative aspect-square bg-zinc-100 dark:bg-white/5 rounded-2xl overflow-hidden">
+                                            <img 
+                                                src={bg} 
+                                                loading="lazy"
+                                                onClick={() => setSelectedBgUrl(bg)}
+                                                className={`w-full h-full object-cover cursor-pointer border-2 transition-all duration-500 ${selectedBgUrl === bg ? 'border-indigo-500 scale-95 shadow-lg' : 'border-transparent hover:scale-105'}`} 
+                                                alt={`Custom BG ${idx + 1}`}
+                                                onLoad={(e) => (e.currentTarget.style.opacity = '1')}
+                                                style={{ opacity: 0 }}
+                                            />
+                                            <button 
+                                                onClick={() => handleDeleteBg(idx)}
+                                                className="absolute -top-1 -right-1 bg-rose-500 text-white p-1 rounded-full shadow-lg hover:scale-110 transition-transform z-10"
+                                            >
+                                                <X size={10} strokeWidth={4}/>
+                                            </button>
+                                        </div>
+                                    ))}
+                                    {(!state.customBackgrounds || state.customBackgrounds.length === 0) && (
+                                        <div className="col-span-full py-4 text-center border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-2xl">
+                                            <p className="text-[8px] font-bold uppercase tracking-widest text-zinc-400">No local uploads</p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
 

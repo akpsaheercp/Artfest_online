@@ -207,7 +207,7 @@ const LanguageFontCard = ({
                     <Type size={24} />
                 </div>
                 <div className="flex-grow">
-                    <h3 className="text-amazio-primary dark:text-white font-serif text-xl font-bold tracking-tight">{title}</h3>
+                    <h3 className="text-brand-primary dark:text-white font-serif text-xl font-bold tracking-tight">{title}</h3>
                     <p className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.2em] mt-1.5">{subtitle}</p>
                 </div>
                 {currentFont && (
@@ -240,7 +240,7 @@ const LanguageFontCard = ({
                 </div>
                 <button 
                     onClick={() => (fileInputRef.current as any)?.click()} 
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 text-[10px] font-black uppercase tracking-widest hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-amazio-primary dark:hover:text-white hover:border-zinc-300 dark:hover:border-zinc-600 transition-all shadow-sm"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 text-[10px] font-black uppercase tracking-widest hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-brand-primary dark:hover:text-white hover:border-zinc-300 dark:hover:border-zinc-600 transition-all shadow-sm"
                 >
                     <Upload size={14} /> {tempFont ? 'Change File' : 'Upload File'}
                 </button>
@@ -249,7 +249,7 @@ const LanguageFontCard = ({
 
              <div className="bg-zinc-100/50 dark:bg-[#050605] rounded-3xl p-8 border border-zinc-200 dark:border-zinc-700/50 min-h-[140px] flex flex-col justify-center relative group-hover:border-zinc-300 dark:group-hover:border-zinc-700 transition-colors">
                 <span className="absolute top-5 left-6 text-[9px] font-black text-zinc-400 dark:text-zinc-600 uppercase tracking-widest">Live Rendering</span>
-                <p className="text-3xl text-amazio-primary dark:text-white text-center leading-relaxed" style={{ fontFamily: (tempFont || currentFont) ? `'${(tempFont || currentFont)?.family}_Preview', sans-serif` : 'inherit', direction: language === 'arabic' ? 'rtl' : 'ltr' }}>
+                <p className="text-3xl text-brand-primary dark:text-white text-center leading-relaxed" style={{ fontFamily: (tempFont || currentFont) ? `'${(tempFont || currentFont)?.family}_Preview', sans-serif` : 'inherit', direction: language === 'arabic' ? 'rtl' : 'ltr' }}>
                     {previewText}
                 </p>
              </div>
@@ -270,12 +270,14 @@ const LanguageFontCard = ({
 const UserFormModal: React.FC<{ 
     isOpen: boolean; 
     onClose: () => void; 
-    onSave: (user: Partial<User>) => void; 
+    onSave: (user: Partial<User>, password?: string) => void; 
     editingUser?: User;
     teams: any[];
     judges: any[];
 }> = ({ isOpen, onClose, onSave, editingUser, teams, judges }) => {
     const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [role, setRole] = useState<UserRole>(UserRole.MANAGER);
     const [assignedEntity, setAssignedEntity] = useState('');
 
@@ -283,12 +285,16 @@ const UserFormModal: React.FC<{
         if (isOpen) {
             if (editingUser) {
                 setUsername(editingUser.username);
+                setEmail(editingUser.email || '');
+                setPassword(editingUser.password || '');
                 setRole(editingUser.role);
                 if (editingUser.role === UserRole.TEAM_LEADER) setAssignedEntity(editingUser.teamId || '');
                 else if (editingUser.role === UserRole.JUDGE) setAssignedEntity(editingUser.judgeId || '');
                 else setAssignedEntity('');
             } else {
                 setUsername('');
+                setEmail('');
+                setPassword('');
                 setRole(UserRole.MANAGER);
                 setAssignedEntity('');
             }
@@ -299,13 +305,15 @@ const UserFormModal: React.FC<{
 
     const handleSave = () => {
         if (!username) return alert('Username is required');
+        if (!editingUser && !email) return alert('Email is required for new accounts');
+        if (!editingUser && !password) return alert('Password is required for new accounts');
         
-        const payload: any = { username, role };
+        const payload: any = { username, role, email };
         if (role === UserRole.TEAM_LEADER) payload.teamId = assignedEntity;
         if (role === UserRole.JUDGE) payload.judgeId = assignedEntity;
         if (editingUser) payload.id = editingUser.id;
         
-        onSave(payload);
+        onSave(payload, password);
     };
 
     return ReactDOM.createPortal(
@@ -313,16 +321,26 @@ const UserFormModal: React.FC<{
             <div className="bg-white dark:bg-[#121412] w-full max-w-lg rounded-[2.5rem] shadow-2xl border border-zinc-200 dark:border-white/10 flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
                 <div className="p-7 border-b border-zinc-100 dark:border-white/5 flex justify-between items-center bg-zinc-50/50 dark:bg-white/[0.01]">
                     <div>
-                        <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-amazio-primary dark:text-white">{editingUser ? 'Edit Operator' : 'New Operator'}</h3>
+                        <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-brand-primary dark:text-white">{editingUser ? 'Edit Operator' : 'New Operator'}</h3>
                         <p className="text-[10px] font-black uppercase text-zinc-400 mt-1.5 tracking-widest">Access Control</p>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-xl transition-colors text-zinc-400"><X size={24}/></button>
                 </div>
-                <div className="p-8 space-y-6">
+                <div className="p-8 space-y-4 overflow-y-auto max-h-[70vh] custom-scrollbar">
                     <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Account Handle</label>
-                        <input type="text" value={username} onChange={e => setUsername(e.target.value)} className="w-full p-4 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-800 text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500/20" placeholder="Username" />
+                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Account Handle (Display Name)</label>
+                        <input type="text" value={username} onChange={e => setUsername(e.target.value)} className="w-full p-4 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-800 text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500/20" placeholder="e.g. Admin One" />
                     </div>
+                    <div>
+                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Email Address (Login ID)</label>
+                        <input type="email" value={email} onChange={e => setEmail(e.target.value)} disabled={!!editingUser} className="w-full p-4 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-800 text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50" placeholder="e.g. admin@fest.com" />
+                    </div>
+                    {!editingUser && (
+                        <div>
+                            <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Initial Password</label>
+                            <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="w-full p-4 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-800 text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500/20" placeholder="••••••••" />
+                        </div>
+                    )}
                     <div>
                         <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Role Priority</label>
                         <select value={role} onChange={e => { setRole(e.target.value as UserRole); setAssignedEntity(''); }} className="w-full p-4 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-800 text-sm font-bold outline-none appearance-none cursor-pointer">
@@ -341,7 +359,7 @@ const UserFormModal: React.FC<{
                     )}
                 </div>
                 <div className="p-7 border-t border-zinc-100 dark:border-white/5 bg-zinc-50/50 dark:bg-white/[0.01] flex justify-end gap-4">
-                    <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-amazio-primary transition-colors">Discard</button>
+                    <button onClick={onClose} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-brand-primary transition-colors">Discard</button>
                     <button onClick={handleSave} className="px-10 py-4 bg-amber-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-amber-500/20 active:scale-95 transition-all">Save Access</button>
                 </div>
             </div>
@@ -362,13 +380,13 @@ const SectionTitle = ({ title, icon: Icon, color = 'indigo' }: { title: string, 
     return (
         <div className="flex items-center gap-3 mb-6">
             <div className={`h-5 w-1.5 rounded-full ${colors[color] || colors.indigo}`}></div>
-            <h3 className="text-xl font-black font-serif text-amazio-primary dark:text-white uppercase tracking-tighter">{title}</h3>
+            <h3 className="text-xl font-black font-serif text-brand-primary dark:text-white uppercase tracking-tighter">{title}</h3>
             {Icon && <Icon className="text-zinc-400 ml-1" size={18} />}
         </div>
     );
 };
 
-const ScopeItem: React.FC<{ label: string, isChecked: boolean, onChange: () => void }> = ({ label, isChecked, onChange }) => (
+const CategoryItem: React.FC<{ label: string, isChecked: boolean, onChange: () => void }> = ({ label, isChecked, onChange }) => (
     <div className="flex items-center justify-between p-3.5 bg-zinc-50/50 dark:bg-black/20 rounded-xl border border-zinc-100 dark:border-white/5 hover:border-zinc-200 dark:hover:border-zinc-700 transition-colors">
         <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400">{label}</span>
         <button onClick={onChange} className={`w-5 h-5 rounded flex items-center justify-center transition-all shadow-sm ${isChecked ? 'bg-lime-500 text-black shadow-lime-500/20' : 'bg-white dark:bg-zinc-800 text-transparent border border-zinc-200 dark:border-zinc-700'}`}>
@@ -408,7 +426,7 @@ const TAB_ICON_MAP: Record<string, React.ElementType> = {
 };
 
 const GeneralSettings: React.FC = () => {
-    const { state, updateSettings, updateCustomFonts, updateGeneralCustomFonts, addUser, updateUser, deleteUser, updatePermissions, updateInstruction, backupData, restoreData, resetSystem, settingsSubView: activeTab } = useFirebase();
+    const { state, updateSettings, updateCustomFonts, updateGeneralCustomFonts, addUser, updateUser, deleteUser, provisionUser, updatePermissions, updateInstruction, backupData, restoreData, resetSystem, resetFestivalToSample, settingsSubView: activeTab } = useFirebase();
     const restoreInputRef = useRef<HTMLInputElement>(null);
     const [isEditingInst, setIsEditingInst] = useState(false);
     const [instData, setInstData] = useState(state?.settings.institutionDetails || { name: '', address: '', email: '', contactNumber: '', description: '', logoUrl: '' });
@@ -419,7 +437,7 @@ const GeneralSettings: React.FC = () => {
         heading: state?.settings.heading || '', 
         description: state?.settings.description || '', 
         eventDates: state?.settings.eventDates || [], 
-        branding: state?.settings.branding || { eventName: '', description: '', typographyUrl: '', typographyUrlLight: '', typographyUrlDark: '', teamLogoUrl: '' } 
+        branding: state?.settings.branding || { eventName: '', description: '', motto: '', themeSubtitle: '', shortName: '', version: '', typographyUrl: '', typographyUrlLight: '', typographyUrlDark: '', teamLogoUrl: '' } 
     });
     
     const [isUserModalOpen, setIsUserModalOpen] = useState(false);
@@ -436,7 +454,7 @@ const GeneralSettings: React.FC = () => {
                 heading: state.settings.heading, 
                 description: state.settings.description, 
                 eventDates: state.settings.eventDates || [], 
-                branding: state.settings.branding || { eventName: '', description: '', typographyUrl: '', typographyUrlLight: '', typographyUrlDark: '', teamLogoUrl: '' } 
+                branding: state.settings.branding || { eventName: '', description: '', motto: '', themeSubtitle: '', shortName: '', version: '', typographyUrl: '', typographyUrlLight: '', typographyUrlDark: '', teamLogoUrl: '' } 
             }); 
         }
     }, [state?.settings, isEditingOrg]);
@@ -455,6 +473,10 @@ const GeneralSettings: React.FC = () => {
                 ...orgData.branding,
                 eventName: orgData.branding?.eventName || '',
                 description: orgData.branding?.description || '',
+                motto: orgData.branding?.motto || '',
+                themeSubtitle: orgData.branding?.themeSubtitle || '',
+                shortName: orgData.branding?.shortName || '',
+                version: orgData.branding?.version || '',
                 typographyUrlLight: orgData.branding?.typographyUrlLight || '',
                 typographyUrlDark: orgData.branding?.typographyUrlDark || ''
             } 
@@ -467,14 +489,19 @@ const GeneralSettings: React.FC = () => {
         updatePermissions({ role, pages });
     };
 
-    const handleSaveUser = async (userData: Partial<User>) => {
-        if (userData.id) {
-            await updateUser(userData as User);
-        } else {
-            await addUser(userData as Omit<User, 'id'>);
+    const handleSaveUser = async (userData: Partial<User>, password?: string) => {
+        try {
+            if (userData.id) {
+                await updateUser(userData as User);
+            } else {
+                if (!password) throw new Error("Password is required for new accounts");
+                await provisionUser(userData as Omit<User, 'id'>, password);
+            }
+            setIsUserModalOpen(false);
+            setEditingUser(undefined);
+        } catch (error: any) {
+            alert("Action failed: " + error.message);
         }
-        setIsUserModalOpen(false);
-        setEditingUser(undefined);
     };
 
     const handleUpdateCustomFont = async (lang: string, font: FontConfig | undefined) => {
@@ -624,27 +651,77 @@ const GeneralSettings: React.FC = () => {
                         <Card title="Event Branding" action={isEditingOrg ? <button onClick={handleSaveOrg} className="p-2 text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg border border-emerald-200 dark:border-emerald-800 transition-colors"><Check size={20}/></button> : <button onClick={() => setIsEditingOrg(true)} className="p-2 text-zinc-400 hover:text-indigo-500 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-lg transition-colors"><Edit2 size={18}/></button>}>
                             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                                 <div className="lg:col-span-2 space-y-6">
-                                    <div>
-                                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Main Branding Title</label>
-                                        <input 
-                                            type="text" 
-                                            value={orgData.branding?.eventName || ''} 
-                                            onChange={e => setOrgData(prev => ({...prev, branding: {...(prev.branding || {}), eventName: e.target.value}}))} 
-                                            disabled={!isEditingOrg} 
-                                            className="w-full p-4 bg-emerald-50/30 dark:bg-emerald-900/10 border border-emerald-200 dark:border-emerald-800 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all disabled:opacity-50"
-                                            placeholder="Primary heading for reports"
-                                        />
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        <div>
+                                            <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Event Name (Detailed)</label>
+                                            <input 
+                                                type="text" 
+                                                value={orgData.branding?.eventName || ''} 
+                                                onChange={e => setOrgData(prev => ({...prev, branding: {...(prev.branding || {}), eventName: e.target.value}}))} 
+                                                disabled={!isEditingOrg} 
+                                                className="w-full p-4 bg-emerald-50/30 dark:bg-emerald-900/10 border border-emerald-200 dark:border-emerald-800 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all disabled:opacity-50"
+                                                placeholder="Primary heading for reports"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Festival Theme Title (Short)</label>
+                                            <input 
+                                                type="text" 
+                                                value={orgData.heading} 
+                                                onChange={e => setOrgData({...orgData, heading: e.target.value})} 
+                                                disabled={!isEditingOrg} 
+                                                className="w-full p-4 bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all disabled:opacity-50"
+                                                placeholder="e.g. FESTIVAL 2026"
+                                            />
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Festival Theme Title</label>
-                                        <input 
-                                            type="text" 
-                                            value={orgData.heading} 
-                                            onChange={e => setOrgData({...orgData, heading: e.target.value})} 
-                                            disabled={!isEditingOrg} 
-                                            className="w-full p-4 bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all disabled:opacity-50"
-                                            placeholder="e.g. AMAZIO 2026"
-                                        />
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        <div>
+                                            <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Brand Motto / Tagline</label>
+                                            <input 
+                                                type="text" 
+                                                value={orgData.branding?.motto || ''} 
+                                                onChange={e => setOrgData(prev => ({...prev, branding: {...(prev.branding || {}), motto: e.target.value}}))} 
+                                                disabled={!isEditingOrg} 
+                                                className="w-full p-4 bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all disabled:opacity-50"
+                                                placeholder="Where Art Meets Orchestration"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Theme Subtitle</label>
+                                            <input 
+                                                type="text" 
+                                                value={orgData.branding?.themeSubtitle || ''} 
+                                                onChange={e => setOrgData(prev => ({...prev, branding: {...(prev.branding || {}), themeSubtitle: e.target.value}}))} 
+                                                disabled={!isEditingOrg} 
+                                                className="w-full p-4 bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all disabled:opacity-50"
+                                                placeholder="The Rooted Tree • Art Fest Edition"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        <div>
+                                            <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">System Brand Name (Short)</label>
+                                            <input 
+                                                type="text" 
+                                                value={orgData.branding?.shortName || ''} 
+                                                onChange={e => setOrgData(prev => ({...prev, branding: {...(prev.branding || {}), shortName: e.target.value}}))} 
+                                                disabled={!isEditingOrg} 
+                                                className="w-full p-4 bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all disabled:opacity-50"
+                                                placeholder="FEST"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">System Version</label>
+                                            <input 
+                                                type="text" 
+                                                value={orgData.branding?.version || ''} 
+                                                onChange={e => setOrgData(prev => ({...prev, branding: {...(prev.branding || {}), version: e.target.value}}))} 
+                                                disabled={!isEditingOrg} 
+                                                className="w-full p-4 bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all disabled:opacity-50"
+                                                placeholder="v6.5"
+                                            />
+                                        </div>
                                     </div>
                                     <div>
                                         <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 ml-1">Branding Subtitle / Description</label>
@@ -786,7 +863,7 @@ const GeneralSettings: React.FC = () => {
                                     <div className="pt-8 border-t border-zinc-100 dark:border-zinc-800">
                                         <div className="flex items-center justify-between mb-6">
                                             <div>
-                                                <h4 className="text-sm font-black uppercase tracking-widest text-amazio-primary dark:text-zinc-100">Extended Type Library</h4>
+                                                <h4 className="text-sm font-black uppercase tracking-widest text-brand-primary dark:text-zinc-100">Extended Type Library</h4>
                                                 <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mt-1">Supplementary fonts for Creative Studio and Reports.</p>
                                             </div>
                                             <div className="flex items-center gap-3">
@@ -987,7 +1064,7 @@ const GeneralSettings: React.FC = () => {
                             </div>
                         </Card>
 
-                        {/* Scope Cards */}
+                        {/* Category Cards */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {[UserRole.TEAM_LEADER, UserRole.THIRD_PARTY, UserRole.JUDGE].map(role => {
                                 const permissions = state.permissions[role] || [];
@@ -997,14 +1074,14 @@ const GeneralSettings: React.FC = () => {
                                     <div key={role} className="bg-white dark:bg-[#121412] border border-zinc-200 dark:border-zinc-800 rounded-[2rem] p-6 shadow-sm md:shadow-xl flex flex-col h-full">
                                         <div className="flex items-center gap-3 mb-6 pb-4 border-b border-zinc-100 dark:border-border">
                                             <div className="h-4 w-1 bg-emerald-500 rounded-full"></div>
-                                            <h4 className="text-amazio-primary dark:text-white font-black font-serif text-lg tracking-tight capitalize">{role.replace('_', ' ')} Scopes</h4>
+                                            <h4 className="text-brand-primary dark:text-white font-black font-serif text-lg tracking-tight capitalize">{role.replace('_', ' ')} Categories</h4>
                                         </div>
                                         
                                         <div className="flex-grow space-y-2 overflow-y-auto custom-scrollbar max-h-[400px] pr-1">
                                             {allTabs.map(tab => {
                                                 const isChecked = permissions.includes(tab);
                                                 return (
-                                                    <ScopeItem 
+                                                    <CategoryItem 
                                                         key={tab} 
                                                         label={tab} 
                                                         isChecked={isChecked} 
@@ -1022,6 +1099,25 @@ const GeneralSettings: React.FC = () => {
             case 'instructions':
                 return (
                     <div className="space-y-10 animate-in slide-in-from-top-4 duration-500 pb-12">
+                        {/* Visibility Toggle */}
+                        <div className="p-8 rounded-[2.5rem] bg-white dark:bg-[#121412] border border-zinc-200 dark:border-white/5 shadow-xl flex items-center justify-between group">
+                            <div className="flex items-center gap-5">
+                                <div className="w-14 h-14 rounded-2xl bg-sky-50 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+                                    <Info size={24} strokeWidth={2.5} />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-black font-serif text-brand-primary dark:text-white uppercase tracking-tighter">In-Page Contextual Guides</h3>
+                                    <p className="text-xs text-zinc-500 mt-1 font-medium">Show or hide the instruction banners displayed at the top of every management page.</p>
+                                </div>
+                            </div>
+                            <div 
+                                onClick={() => updateSettings({ showInPageInstructions: !state.settings.showInPageInstructions })}
+                                className={`w-16 h-8 rounded-full p-1 cursor-pointer transition-all duration-500 ${state.settings.showInPageInstructions ? 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'bg-zinc-200 dark:bg-zinc-800'}`}
+                            >
+                                <div className={`w-6 h-6 bg-white rounded-full shadow-lg transform transition-all duration-500 ${state.settings.showInPageInstructions ? 'translate-x-8 rotate-180' : 'translate-x-0'}`} />
+                            </div>
+                        </div>
+
                         {/* General Master Instructions Section */}
                         <div className="group relative flex flex-col h-full bg-white dark:bg-[#121412] rounded-[2.5rem] border border-emerald-500/20 dark:border-white/5 shadow-2xl overflow-hidden transition-all duration-300 hover:border-emerald-500/40">
                             <div className="p-6 border-b border-zinc-100 dark:border-white/5 flex items-center justify-between bg-emerald-50/50 dark:bg-emerald-900/10">
@@ -1030,7 +1126,7 @@ const GeneralSettings: React.FC = () => {
                                         <Sparkles size={20} strokeWidth={2.5} />
                                     </div>
                                     <div>
-                                        <h4 className="text-sm font-black uppercase tracking-tight text-amazio-primary dark:text-white">General Festival Instructions</h4>
+                                        <h4 className="text-sm font-black uppercase tracking-tight text-brand-primary dark:text-white">General Festival Instructions</h4>
                                         <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Global System Broadcast</p>
                                     </div>
                                 </div>
@@ -1044,7 +1140,7 @@ const GeneralSettings: React.FC = () => {
                                     rows={6} 
                                     value={state.settings.generalInstructions || ''} 
                                     onChange={e => updateSettings({ generalInstructions: e.target.value })} 
-                                    className="w-full p-6 bg-zinc-50 dark:bg-black/40 border border-zinc-200 dark:border-zinc-800 rounded-[2.5rem] text-sm font-bold text-amazio-primary dark:text-zinc-100 outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-zinc-400 resize-none shadow-inner"
+                                    className="w-full p-6 bg-zinc-50 dark:bg-black/40 border border-zinc-200 dark:border-zinc-800 rounded-[2.5rem] text-sm font-bold text-brand-primary dark:text-zinc-100 outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-zinc-400 resize-none shadow-inner"
                                     placeholder="Enter global rules, welcome messages, and master announcements here..."
                                 />
                             </div>
@@ -1069,7 +1165,7 @@ const GeneralSettings: React.FC = () => {
                                                     <Icon size={20} strokeWidth={2.5} />
                                                 </div>
                                                 <div className="min-w-0 flex-1">
-                                                    <h4 className="text-sm font-black uppercase tracking-tight text-amazio-primary dark:text-white truncate">
+                                                    <h4 className="text-sm font-black uppercase tracking-tight text-brand-primary dark:text-white truncate">
                                                         {TAB_DISPLAY_NAMES[tab] || tab}
                                                     </h4>
                                                     <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Contextual Guide</p>
@@ -1080,12 +1176,12 @@ const GeneralSettings: React.FC = () => {
                                                     rows={4} 
                                                     value={state.instructions[tab] || ''} 
                                                     onChange={e => updateInstruction({page: tab, text: e.target.value})} 
-                                                    className="w-full p-4 bg-zinc-50 dark:bg-black/40 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-sm font-bold text-amazio-primary dark:text-zinc-100 outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder:text-zinc-400 resize-none"
+                                                    className="w-full p-4 bg-zinc-50 dark:bg-black/40 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-sm font-bold text-brand-primary dark:text-zinc-100 outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder:text-zinc-400 resize-none"
                                                     placeholder={`Type directions for the ${TAB_DISPLAY_NAMES[tab] || tab} page here...`}
                                                 />
                                             </div>
                                             <div className="px-6 py-4 bg-zinc-50/30 dark:bg-black/10 flex items-center justify-between border-t border-zinc-50 dark:border-white/5">
-                                                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 flex items-center gap-1.5"><Shield size={10}/> Local Scope</span>
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 flex items-center gap-1.5"><Shield size={10}/> Local Category</span>
                                                 <CheckCircle2 size={14} className="text-emerald-500 opacity-0 group-focus-within:opacity-100 transition-opacity" />
                                             </div>
                                         </div>
@@ -1114,7 +1210,7 @@ const GeneralSettings: React.FC = () => {
                                     <div className="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6 shadow-inner group-hover:scale-110 transition-transform">
                                         <FileDown size={32} />
                                     </div>
-                                    <h3 className="text-2xl font-black font-serif text-amazio-primary dark:text-white uppercase tracking-tighter">Snapshot State</h3>
+                                    <h3 className="text-2xl font-black font-serif text-brand-primary dark:text-white uppercase tracking-tighter">Snapshot State</h3>
                                     <p className="text-xs text-zinc-500 mt-2 leading-relaxed">Generate a comprehensive JSON archive containing all current configurations, participants, and scoring data.</p>
                                 </div>
                                 <div className="p-8 mt-auto">
@@ -1133,7 +1229,7 @@ const GeneralSettings: React.FC = () => {
                                     <div className="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-6 shadow-inner group-hover:scale-110 transition-transform">
                                         <RefreshCw className="animate-spin" size={16} />
                                     </div>
-                                    <h3 className="text-2xl font-black font-serif text-amazio-primary dark:text-white uppercase tracking-tighter">System Restore</h3>
+                                    <h3 className="text-2xl font-black font-serif text-brand-primary dark:text-white uppercase tracking-tighter">System Restore</h3>
                                     <p className="text-xs text-zinc-500 mt-2 leading-relaxed">Overwrite the existing database with data from a previously generated snapshot. <span className="text-indigo-500 font-bold uppercase">This action is irreversible.</span></p>
                                 </div>
                                 <div className="p-8 mt-auto">
@@ -1165,7 +1261,7 @@ const GeneralSettings: React.FC = () => {
                                     <div className="w-16 h-16 rounded-2xl bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center text-rose-600 dark:text-rose-500 mb-6 shadow-inner group-hover:scale-110 transition-transform">
                                         <Trash2 size={32} />
                                     </div>
-                                    <h3 className="text-2xl font-black font-serif text-amazio-primary dark:text-white uppercase tracking-tighter">Factory Reset</h3>
+                                    <h3 className="text-2xl font-black font-serif text-brand-primary dark:text-white uppercase tracking-tighter">Factory Reset</h3>
                                     <p className="text-xs text-zinc-500 mt-2 leading-relaxed">Wipe all competition data, user accounts, and media assets. Revert the terminal to its initial empty state.</p>
                                 </div>
                                 <div className="p-8 mt-auto">
@@ -1174,6 +1270,25 @@ const GeneralSettings: React.FC = () => {
                                         className="w-full py-4 bg-rose-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-rose-500/20 hover:bg-rose-700 active:scale-95 transition-all flex items-center justify-center gap-2"
                                     >
                                         <ShieldAlert size={16} strokeWidth={3}/> Purge All Data
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Sample Reset Section */}
+                            <div className="group relative flex flex-col h-full bg-emerald-50 dark:bg-emerald-950/20 rounded-[2.5rem] border border-emerald-100 dark:border-emerald-900/50 shadow-2xl overflow-hidden transition-all duration-300 hover:border-emerald-500/30 hover:-translate-y-1">
+                                <div className="p-8 pb-4">
+                                    <div className="w-16 h-16 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-500 mb-6 shadow-inner group-hover:scale-110 transition-transform">
+                                        <Sparkles size={32} />
+                                    </div>
+                                    <h3 className="text-2xl font-black font-serif text-brand-primary dark:text-white uppercase tracking-tighter">Sample Reset</h3>
+                                    <p className="text-xs text-zinc-500 mt-2 leading-relaxed">Instantly populate your festival with the high-volume sample set: <span className="text-emerald-600 font-bold uppercase">100 Participants, 50 Items, and full results.</span></p>
+                                </div>
+                                <div className="p-8 mt-auto">
+                                    <button 
+                                        onClick={resetFestivalToSample}
+                                        className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-emerald-500/20 hover:bg-emerald-700 active:scale-95 transition-all flex items-center justify-center gap-2"
+                                    >
+                                        <RefreshCw size={16} strokeWidth={3}/> Load 100 Delegates
                                     </button>
                                 </div>
                             </div>
@@ -1195,7 +1310,7 @@ const GeneralSettings: React.FC = () => {
             <div className="flex flex-col gap-6">
                 <div className="hidden md:flex flex-col sm:flex-row sm:items-end justify-between gap-6">
                     <div>
-                        <h2 className="text-5xl font-black font-serif text-amazio-primary dark:text-white tracking-tighter uppercase leading-none">Settings</h2>
+                        <h2 className="text-5xl font-black font-serif text-brand-primary dark:text-white tracking-tighter uppercase leading-none">Settings</h2>
                         <p className="text-zinc-500 dark:text-zinc-400 mt-3 font-medium text-lg italic">System orchestration console.</p>
                     </div>
                 </div>

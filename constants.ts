@@ -28,7 +28,7 @@ export const TAB_SEARCH_INDEX: { [key: string]: string[] } = {
         'backup', 'restore', 'institution', 'logo', 'fonts', 'malayalam', 'arabic', 'permissions', 
         'branding', 'typography', 'export', 'import', 'reset'
     ],
-    [TABS.TEAMS_CATEGORIES]: ['houses', 'levels', 'groups', 'scopes', 'categories', 'team leader', 'assistant coordinator'],
+    [TABS.TEAMS_CATEGORIES]: ['houses', 'levels', 'groups', 'categories', 'team leader', 'assistant coordinator'],
     [TABS.ITEMS]: ['registry', 'participants', 'list', 'disciplines', 'entries', 'enrollment', 'performance type', 'medium', 'duration'],
     [TABS.GRADE_POINTS]: [
         'codes', 'grades', 'lots', 'mapping', 'results logic', 'prizes', 'scoring rules', 
@@ -105,6 +105,7 @@ export const DEFAULT_PAGE_PERMISSIONS: { [key in UserRole]: string[] } = {
     [UserRole.TEAM_LEADER]: [
         TABS.LANDING,
         TABS.DASHBOARD,
+        TABS.ITEMS,
         TABS.DATA_ENTRY,
         TABS.SCHEDULE,
         TABS.POINTS,

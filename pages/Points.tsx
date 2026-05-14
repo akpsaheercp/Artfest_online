@@ -85,7 +85,7 @@ const DetailModal: React.FC<{
                             <Icon size={24} />
                         </div>
                         <div>
-                            <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-amazio-primary dark:text-white">{title}</h3>
+                            <h3 className="text-xl font-black font-serif uppercase tracking-tighter leading-none text-brand-primary dark:text-white">{title}</h3>
                             {subtitle && <p className="text-[10px] font-black uppercase text-zinc-400 mt-1.5 tracking-widest">{subtitle}</p>}
                         </div>
                     </div>
@@ -355,10 +355,10 @@ const PointsPage: React.FC = () => {
             {/* Header */}
             <div className="hidden md:flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                 <div>
-                    <h2 className="text-5xl font-black font-serif text-amazio-primary dark:text-white tracking-tighter uppercase leading-none">Point Tallies</h2>
+                    <h2 className="text-5xl font-black font-serif text-brand-primary dark:text-white tracking-tighter uppercase leading-none">Point Tallies</h2>
                     <p className="text-zinc-500 dark:text-zinc-400 mt-3 font-medium text-lg italic">Global standings and contribution analysis.</p>
                 </div>
-                <div className="flex bg-white/40 dark:bg-black/20 p-1.5 rounded-2xl border border-amazio-primary/5 shadow-inner">
+                <div className="flex bg-white/40 dark:bg-black/20 p-1.5 rounded-2xl border border-brand-primary/5 shadow-inner">
                     <button onClick={() => setViewMode('STANDINGS')} className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'STANDINGS' ? 'bg-indigo-600 text-white shadow-lg' : 'text-zinc-500'}`}>Leaderboard</button>
                     <button onClick={() => setViewMode('ITEMS')} className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'ITEMS' ? 'bg-indigo-600 text-white shadow-lg' : 'text-zinc-500'}`}>By Item</button>
                     <button onClick={() => setViewMode('PARTICIPANTS')} className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'PARTICIPANTS' ? 'bg-indigo-600 text-white shadow-lg' : 'text-zinc-500'}`}>By Participant</button>
@@ -366,7 +366,7 @@ const PointsPage: React.FC = () => {
             </div>
 
             {/* Mobile View Toggles */}
-            <div className="md:hidden flex bg-white/40 dark:bg-black/20 p-1 rounded-xl border border-amazio-primary/5">
+            <div className="md:hidden flex bg-white/40 dark:bg-black/20 p-1 rounded-xl border border-brand-primary/5">
                 <button onClick={() => setViewMode('STANDINGS')} className={`flex-1 py-2 text-[8px] font-black uppercase rounded-lg ${viewMode === 'STANDINGS' ? 'bg-indigo-600 text-white shadow-md' : 'text-zinc-500'}`}>Stats</button>
                 <button onClick={() => setViewMode('ITEMS')} className={`flex-1 py-2 text-[8px] font-black uppercase rounded-lg ${viewMode === 'ITEMS' ? 'bg-indigo-600 text-white shadow-md' : 'text-zinc-500'}`}>Items</button>
                 <button onClick={() => setViewMode('PARTICIPANTS')} className={`flex-1 py-2 text-[8px] font-black uppercase rounded-lg ${viewMode === 'PARTICIPANTS' ? 'bg-indigo-600 text-white shadow-md' : 'text-zinc-500'}`}>People</button>
@@ -386,11 +386,11 @@ const PointsPage: React.FC = () => {
                     <div className="flex justify-between items-center px-2">
                         <div className="flex items-center gap-3">
                             <Trophy size={20} className="text-amber-500" />
-                            <h3 className="text-xl font-black font-serif uppercase text-amazio-primary dark:text-white">Unit Standings</h3>
+                            <h3 className="text-xl font-black font-serif uppercase text-brand-primary dark:text-white">Unit Standings</h3>
                         </div>
-                        <div className="flex items-center gap-1 bg-zinc-100 dark:bg-black/20 p-1 rounded-xl border border-amazio-primary/5">
+                        <div className="flex items-center gap-1 bg-zinc-100 dark:bg-black/20 p-1 rounded-xl border border-brand-primary/5">
                             {['BOTH', 'RANK', 'GRADE'].map(f => (
-                                <button key={f} onClick={() => setViewFilter(f as any)} className={`px-3 py-1 rounded-lg text-[8px] font-black uppercase transition-all ${viewFilter === f ? 'bg-white dark:bg-zinc-800 text-amazio-primary dark:text-white shadow-sm' : 'text-zinc-400'}`}>{f}</button>
+                                <button key={f} onClick={() => setViewFilter(f as any)} className={`px-3 py-1 rounded-lg text-[8px] font-black uppercase transition-all ${viewFilter === f ? 'bg-white dark:bg-zinc-800 text-brand-primary dark:text-white shadow-sm' : 'text-zinc-400'}`}>{f}</button>
                             ))}
                         </div>
                     </div>
@@ -406,7 +406,7 @@ const PointsPage: React.FC = () => {
                                         <div className="flex items-center gap-4 min-w-0">
                                             <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center font-black text-lg sm:text-2xl ${idx === 0 ? 'bg-amber-400 text-amber-950 shadow-lg' : idx === 1 ? 'bg-slate-200 text-slate-700' : 'bg-zinc-100 text-zinc-400'}`}>{idx + 1}</div>
                                             <div className="min-w-0">
-                                                <h4 className="text-base sm:text-2xl font-black uppercase text-amazio-primary dark:text-white truncate">{team.teamName}</h4>
+                                                <h4 className="text-base sm:text-2xl font-black uppercase text-brand-primary dark:text-white truncate">{team.teamName}</h4>
                                                 <div className="flex gap-2 mt-1">
                                                     <PointChip type="rank" value={team.totalRankPoints} />
                                                     <PointChip type="grade" value={team.totalGradePoints} />
@@ -496,7 +496,7 @@ const PointsPage: React.FC = () => {
                 <div className="space-y-6 animate-in slide-in-from-right duration-500">
                     <div className="flex items-center gap-3 px-2">
                         <BookOpen size={20} className="text-emerald-500" />
-                        <h3 className="text-xl font-black font-serif uppercase text-amazio-primary dark:text-white">Item Analytics</h3>
+                        <h3 className="text-xl font-black font-serif uppercase text-brand-primary dark:text-white">Item Analytics</h3>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         {analytics.itemAggregate.map(agg => (
@@ -509,7 +509,7 @@ const PointsPage: React.FC = () => {
                                     <div className="px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[10px] font-black uppercase text-zinc-500 border border-zinc-200 dark:border-zinc-700">{agg.category.name}</div>
                                     <div className="text-2xl font-black text-indigo-500 tabular-nums">{agg.totalPoints}</div>
                                 </div>
-                                <h4 className="text-lg font-black uppercase text-amazio-primary dark:text-white tracking-tight leading-tight mb-4">{agg.item.name}</h4>
+                                <h4 className="text-lg font-black uppercase text-brand-primary dark:text-white tracking-tight leading-tight mb-4">{agg.item.name}</h4>
                                 <div className="mt-auto flex items-center justify-between text-[10px] font-black uppercase text-zinc-400 tracking-widest pt-4 border-t border-zinc-50 dark:border-white/5">
                                     <span>{agg.winners.length} Scorers</span>
                                     <span className="flex items-center gap-1 group-hover:text-indigo-500 transition-colors">Details <ExternalLink size={10}/></span>
@@ -531,7 +531,7 @@ const PointsPage: React.FC = () => {
                 <div className="space-y-6 animate-in zoom-in-95 duration-500">
                     <div className="flex items-center gap-3 px-2">
                         <UserCheck size={20} className="text-indigo-500" />
-                        <h3 className="text-xl font-black font-serif uppercase text-amazio-primary dark:text-white">Contributor Registry</h3>
+                        <h3 className="text-xl font-black font-serif uppercase text-brand-primary dark:text-white">Contributor Registry</h3>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         {participantsAggregated.map(p => {
@@ -548,7 +548,7 @@ const PointsPage: React.FC = () => {
                                                 {p.name.charAt(0).toUpperCase()}
                                             </div>
                                             <div className="min-w-0">
-                                                <h4 className="text-lg font-black uppercase text-amazio-primary dark:text-white truncate leading-tight group-hover:text-indigo-500 transition-colors mb-1">{p.name}</h4>
+                                                <h4 className="text-lg font-black uppercase text-brand-primary dark:text-white truncate leading-tight group-hover:text-indigo-500 transition-colors mb-1">{p.name}</h4>
                                                 <div className="flex flex-wrap items-center gap-2">
                                                     <span className="text-[11px] font-black bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 px-2.5 py-0.5 rounded-lg border border-indigo-100 dark:border-indigo-800">#{p.chestNumber}</span>
                                                     {p.place && <div className="flex items-center gap-1 text-[10px] font-bold text-zinc-400 italic truncate"><MapPin size={10}/> {p.place}</div>}
@@ -608,7 +608,7 @@ const PointsPage: React.FC = () => {
                                     </div>
                                     <div className="min-w-0">
                                         <div className="flex items-center gap-2">
-                                            <h5 className="font-black text-amazio-primary dark:text-zinc-100 uppercase text-sm truncate">{w.participantName}</h5>
+                                            <h5 className="font-black text-brand-primary dark:text-zinc-100 uppercase text-sm truncate">{w.participantName}</h5>
                                             {w.codeLetter && (
                                                 <span className="px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 text-[9px] font-black border border-indigo-100 dark:border-indigo-800 shadow-sm">
                                                     {w.codeLetter}
@@ -665,7 +665,7 @@ const PointsPage: React.FC = () => {
                                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
                                         <span className="text-[9px] font-black uppercase text-zinc-400 tracking-widest">{e.category.name}</span>
                                     </div>
-                                    <h5 className="text-sm font-black uppercase text-amazio-primary dark:text-zinc-100 truncate">{e.item.name}</h5>
+                                    <h5 className="text-sm font-black uppercase text-brand-primary dark:text-zinc-100 truncate">{e.item.name}</h5>
                                     <div className="flex gap-2 mt-1.5">
                                         {e.rank > 0 && <span className="text-[8px] font-black px-2 py-0.5 rounded-lg bg-amber-50 text-amber-600 border border-amber-100">Rank {e.rank}</span>}
                                         {e.gradeName !== '-' && <span className="text-[8px] font-black px-2 py-0.5 rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100">{e.gradeName}</span>}
