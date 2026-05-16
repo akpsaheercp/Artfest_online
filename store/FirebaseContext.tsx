@@ -495,7 +495,7 @@ export const FirebaseProvider: React.FC<{ children: ReactNode }> = ({ children }
       const batch = writeBatch(db);
       items.forEach(item => {
           const ref = doc(db, 'festivals', currentFestival.id, col, item.id);
-          batch.update(ref, item);
+          batch.set(ref, item, { merge: true });
       });
       await batch.commit();
   };

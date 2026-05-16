@@ -333,29 +333,36 @@ const LotMachine: React.FC = () => {
     const handleAssign = async () => {
         if (!state || !selectedItemId) return;
         setIsSpinning(true); 
-        const updates = lotResults.map(res => {
-            const entryId = `${selectedItemId}-${res.participantId}`;
-            const existing = state.tabulation.find(t => t.id === entryId);
-            return existing ? { ...existing, codeLetter: res.code } : {
-                id: entryId, itemId: selectedItemId, categoryId: availableItems.find(i=>i.id===selectedItemId)?.categoryId || '',
-                participantId: res.participantId, codeLetter: res.code, marks: {}, finalMark: null, position: null, gradeId: null
-            };
-        });
-        await updateMultipleTabulationEntries(updates as any);
-        const usedCodes = new Set(lotResults.filter(r => r.code !== '?').map(r => r.code));
-        await updateLotPool(lotPool.filter(c => !usedCodes.has(c)));
-        
-        setIsSpinning(false);
-        setAssignmentStatus('success');
-        
-        // Success Timeout
-        setTimeout(() => { 
-            setAssignmentStatus('idle'); 
-            setSelectedParticipantIds(new Set()); 
-            setLotResults([]); 
-            setSelectedItemId('');
-            setSelectedCategoryId('');
-        }, 3000);
+        try {
+            const updates = lotResults.map(res => {
+                const entryId = `${selectedItemId}-${res.participantId}`;
+                const existing = state.tabulation.find(t => t.id === entryId);
+                return existing ? { ...existing, codeLetter: res.code } : {
+                    id: entryId, itemId: selectedItemId, categoryId: availableItems.find(i=>i.id===selectedItemId)?.categoryId || '',
+                    participantId: res.participantId, codeLetter: res.code, marks: {}, finalMark: null, position: null, gradeId: null
+                };
+            });
+            await updateMultipleTabulationEntries(updates as any);
+            const usedCodes = new Set(lotResults.filter(r => r.code !== '?').map(r => r.code));
+            await updateLotPool(lotPool.filter(c => !usedCodes.has(c)));
+            
+            setAssignmentStatus('success');
+            
+            // Success Timeout
+            setTimeout(() => { 
+                setAssignmentStatus('idle'); 
+                setSelectedParticipantIds(new Set()); 
+                setLotResults([]); 
+                setSelectedItemId('');
+                setSelectedCategoryId('');
+            }, 3000);
+        } catch (error) {
+            console.error("Assignment failed:", error);
+            alert("Failed to assign code letters. Please try again.");
+            setAssignmentStatus('error');
+        } finally {
+            setIsSpinning(false);
+        }
     };
 
     return (

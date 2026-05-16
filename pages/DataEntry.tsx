@@ -105,7 +105,7 @@ const ItemManagementModal: React.FC<{
     item: Item;
     currentUser: User | null;
 }> = ({ isOpen, onClose, item, currentUser }) => {
-    const { state, updateMultipleParticipants } = useFirebase();
+    const { state, updateMultipleParticipants, globalFilters } = useFirebase();
     const [search, setSearch] = useState('');
     const [draftParticipants, setDraftParticipants] = useState<Participant[]>([]);
     const [isSaving, setIsSaving] = useState(false);
@@ -124,7 +124,9 @@ const ItemManagementModal: React.FC<{
             .filter(p => {
                 const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) || p.chestNumber.toLowerCase().includes(search.toLowerCase());
                 const matchesTeam = currentUser?.role === UserRole.TEAM_LEADER ? p.teamId === currentUser.teamId : true;
-                return matchesSearch && matchesTeam;
+                const matchesGlobalTeam = globalFilters.teamId.length > 0 ? globalFilters.teamId.includes(p.teamId) : true;
+                const matchesGlobalCategory = globalFilters.categoryId.length > 0 ? globalFilters.categoryId.includes(p.categoryId) : true;
+                return matchesSearch && matchesTeam && matchesGlobalTeam && matchesGlobalCategory;
             });
         
         const groups: Record<string, Participant[]> = {};
@@ -134,7 +136,7 @@ const ItemManagementModal: React.FC<{
             groups[catName].push(p);
         });
         return groups;
-    }, [draftParticipants, item.id, item.categoryId, state, search, currentUser]);
+    }, [draftParticipants, item.id, item.categoryId, state, search, currentUser, globalFilters]);
 
     if (!isOpen || !state) return null;
 
@@ -268,7 +270,10 @@ const ItemManagementModal: React.FC<{
                                 <UsersIcon size={14}/> Unit Status
                             </h4>
                             <div className="space-y-4">
-                                {state.teams.filter(t => currentUser?.role === UserRole.TEAM_LEADER ? t.id === currentUser.teamId : true).map(team => {
+                                {state.teams
+                                    .filter(t => currentUser?.role === UserRole.TEAM_LEADER ? t.id === currentUser.teamId : true)
+                                    .filter(t => globalFilters.teamId.length > 0 ? globalFilters.teamId.includes(t.id) : true)
+                                    .map(team => {
                                     const teamParticipants = draftParticipants.filter(p => p.teamId === team.id && p.itemIds.includes(item.id));
                                     
                                     return (

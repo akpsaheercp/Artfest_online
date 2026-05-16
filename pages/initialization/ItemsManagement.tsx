@@ -120,6 +120,20 @@ export const GroupEntryModal: React.FC<{ isOpen: boolean; onClose: () => void; e
         if (members.length === 0) return alert("No members in group.");
         const leader = members.find(m => m.id === leaderId);
         if (!leader) return alert("Select a leader.");
+
+        // Uniqueness check for group chest number
+        if (chestNo) {
+            const isDuplicateIndividual = state.participants.some(p => p.chestNumber === chestNo);
+            const isDuplicateGroup = state.participants.some(p => 
+                Object.entries(p.groupChestNumbers || {}).some(([itemId, code]) => 
+                    code === chestNo && !(p.id === leaderId && itemId === entry.itemId)
+                )
+            );
+            
+            if (isDuplicateIndividual || isDuplicateGroup) {
+                return alert(`Chest Number "${chestNo}" is already assigned.`);
+            }
+        }
         
         const updates: Participant[] = members.map(m => {
             const isLeader = m.id === leaderId;
@@ -361,6 +375,21 @@ export const ParticipantFormModal: React.FC<{
 
     const handleSave = async () => {
         if (!formData.name || !formData.teamId || !formData.categoryId) return alert("Please fill Name, Team and Category.");
+        
+        // Uniqueness check for chestNumber
+        if (formData.chestNumber) {
+            const isDuplicateIndividual = state.participants.some(p => 
+                p.chestNumber === formData.chestNumber && p.id !== editingParticipant?.id
+            );
+            const isDuplicateGroup = state.participants.some(p => 
+                Object.values(p.groupChestNumbers || {}).some(code => code === formData.chestNumber)
+            );
+            
+            if (isDuplicateIndividual || isDuplicateGroup) {
+                return alert(`Chest Number "${formData.chestNumber}" is already assigned.`);
+            }
+        }
+
         if (editingParticipant) await updateParticipant(formData as Participant);
         else await addParticipant(formData as Omit<Participant, 'id'>);
         onClose();
